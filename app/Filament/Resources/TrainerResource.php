@@ -34,26 +34,28 @@ class TrainerResource extends Resource
     {
         return $form->schema([
             Card::make()->schema([
-                Grid::make(['default' => 0])->schema([
+                Grid::make(['default' => 12])->schema([
                     static::getTrainerForm(true)
                 ]),
             ]),
         ]);
     }
 
-    public static function getUserRelation() {
+    public static function getUserRelation()
+    {
         return Select::make('user_id')
-                ->rules(['required', 'exists:users,id'])
-                ->relationship('user', 'name')
-                ->searchable()
-                ->placeholder('User')
-                ->columnSpan([
-                    'default' => 12,
-                    'md' => 6,
-                    'lg' => 6,
-                ]);
+            ->rules(['required', 'exists:users,id'])
+            ->relationship('user', 'name')
+            ->searchable()
+            ->placeholder('User')
+            ->columnSpan([
+                'default' => 12,
+                'md' => 6,
+                'lg' => 6,
+            ]);
     }
-    public static function getTrainerForm($relation = false) {
+    public static function getTrainerForm($relation = false)
+    {
 
         $schema = [];
 
@@ -105,7 +107,7 @@ class TrainerResource extends Resource
                     'lg' => 6,
                 ])->inline(false)->default(false)
                 ->reactive(),
-                
+
             Select::make('company_id')
                 ->rules(['required', 'exists:companies,id'])
                 ->relationship('company', 'name')
@@ -126,7 +128,7 @@ class TrainerResource extends Resource
                     'lg' => 12,
                 ]),
 
-            
+
             RichEditor::make('note')
                 ->rules(['nullable', 'max:255', 'string'])
                 ->placeholder('Note')
@@ -164,7 +166,7 @@ class TrainerResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -175,7 +177,7 @@ class TrainerResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

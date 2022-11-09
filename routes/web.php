@@ -7,7 +7,9 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\CompanyLeadController;
+use App\Http\Controllers\CourseGroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +35,6 @@ Route::prefix('/')
         Route::resource('courses', CourseController::class);
         Route::resource('leads', LeadController::class);
         Route::resource('company-leads', CompanyLeadController::class);
+        Route::resource('course-groups', CourseGroupController::class);
+        Route::resource('assigments', AssigmentController::class);
     });

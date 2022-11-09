@@ -4,15 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Models\Lead;
 use Filament\{Tables, Forms};
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\LeadResource\Pages;
+use Filament\Forms\Components\BelongsToSelect;
+use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Resources\{Form, Table, Resource};
 
 class LeadResource extends Resource
@@ -24,7 +25,6 @@ class LeadResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     protected static ?string $recordTitleAttribute = 'name';
-    
 
     public static function form(Form $form): Form
     {
@@ -35,8 +35,8 @@ class LeadResource extends Resource
                 ->relationship('followUps')
                 ->schema([
                     FollowUpResource::getFollowUpForm()
-                ])->columnSpan('full')
-            ]);
+                ])->columnSpan('full'),
+        ]);
     }
 
     public static function getLeadForm()
@@ -44,107 +44,71 @@ class LeadResource extends Resource
         return Section::make('Lead Infomration')->schema([
             Grid::make(['default' => 12])->schema([
                 TextInput::make('name')
-                    ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Name')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+                        ->rules(['required', 'max:255', 'string'])
+                        ->placeholder('Name')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
 
-                TextInput::make('name_ar')
-                    ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Name Ar')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+                    TextInput::make('email')
+                        ->rules(['nullable', 'email'])
+                        ->email()
+                        ->placeholder('Email')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
 
-                TextInput::make('email')
-                    ->rules(['required', 'email'])
-                    ->email()
-                    ->placeholder('Email')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+                    TextInput::make('phone')
+                        ->rules(['nullable', 'max:255', 'string'])
+                        ->placeholder('Phone')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
 
-                TextInput::make('phone')
-                    ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Phone')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+                    TextInput::make('category_approved')
+                        ->rules(['nullable', 'max:255', 'string'])
+                        ->placeholder('Category Approved')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
 
-                TextInput::make('category_approved')
-                    ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Category Approved')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+                    Select::make('category_id')
+                        ->rules(['required', 'exists:categories,id'])
+                        ->relationship('category', 'name')
+                        ->placeholder('Category')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
 
-                Select::make('category_id')
-                    ->rules(['required', 'exists:categories,id'])
-                    ->relationship('category', 'name')
-                    ->placeholder('Category')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-
-                Select::make('lead_from')
-                    ->rules([
-                        'nullable',
-                        'in:website,calls,whatsapp,by_visit',
-                    ])
-                    ->searchable()
-                    ->options([
-                        'website' => 'Website',
-                        'calls' => 'Calls',
-                        'whatsapp' => 'Whatsapp',
-                        'by_visit' => 'By visit',
-                    ])
-                    ->placeholder('Lead From')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-
-                TextInput::make('status')
-                    ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Status')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-
-                TextInput::make('business_landline')
-                    ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Business Landline')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-
-                RichEditor::make('note')
-                    ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Note')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
-            ]),
+                    Select::make('lead_from')
+                        ->rules([
+                            'nullable',
+                            'in:website,calls,whatsapp,by_visit',
+                        ])
+                        ->searchable()
+                        ->options([
+                            'website' => 'Website',
+                            'calls' => 'Calls',
+                            'whatsapp' => 'Whatsapp',
+                            'by_visit' => 'By visit',
+                        ])
+                        ->placeholder('Lead From')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
+            ])
         ]);
     }
 
@@ -153,14 +117,9 @@ class LeadResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->limit(50),
-                Tables\Columns\TextColumn::make('name_ar')->limit(50),
                 Tables\Columns\TextColumn::make('email')->limit(50),
                 Tables\Columns\TextColumn::make('phone')->limit(50),
                 Tables\Columns\TextColumn::make('category_approved')->limit(50),
-                Tables\Columns\TextColumn::make('course_type')->enum([
-                    'medical' => 'Medical',
-                    'technical' => 'Technical',
-                ]),
                 Tables\Columns\TextColumn::make('category.name')->limit(50),
                 Tables\Columns\TextColumn::make('lead_from')->enum([
                     'website' => 'Website',
@@ -168,9 +127,6 @@ class LeadResource extends Resource
                     'whatsapp' => 'Whatsapp',
                     'by_visit' => 'By visit',
                 ]),
-                Tables\Columns\TextColumn::make('status')->limit(50),
-                Tables\Columns\TextColumn::make('business_landline')->limit(50),
-                Tables\Columns\TextColumn::make('note')->limit(50),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -204,16 +160,17 @@ class LeadResource extends Resource
                             );
                     }),
 
-                SelectFilter::make('category_id')->relationship(
+                MultiSelectFilter::make('category_id')->relationship(
                     'category',
                     'name'
-                )->multiple(),
+                ),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
+            LeadResource\RelationManagers\FollowUpsRelationManager::class,
             LeadResource\RelationManagers\DocumentsRelationManager::class,
         ];
     }

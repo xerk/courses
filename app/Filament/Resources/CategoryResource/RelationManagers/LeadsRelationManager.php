@@ -23,7 +23,7 @@ class LeadsRelationManager extends HasManyRelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 TextInput::make('name')
                     ->rules(['required', 'max:255', 'string'])
                     ->placeholder('Name')
@@ -164,7 +164,7 @@ class LeadsRelationManager extends HasManyRelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -175,7 +175,7 @@ class LeadsRelationManager extends HasManyRelationManager
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

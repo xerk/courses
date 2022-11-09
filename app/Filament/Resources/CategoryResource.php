@@ -4,12 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Models\Category;
 use Filament\{Tables, Forms};
-use Filament\Resources\{Form, Table, Resource};
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\{Form, Table, Resource};
 use App\Filament\Resources\CategoryResource\Pages;
 
 class CategoryResource extends Resource
@@ -26,7 +26,7 @@ class CategoryResource extends Resource
     {
         return $form->schema([
             Card::make()->schema([
-                Grid::make(['default' => 0])->schema([
+                Grid::make(['default' => 12])->schema([
                     TextInput::make('name')
                         ->rules(['required', 'max:255', 'string'])
                         ->placeholder('Name')
@@ -67,7 +67,7 @@ class CategoryResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -78,7 +78,7 @@ class CategoryResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -94,9 +94,9 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CategoryResource\RelationManagers\UsersRelationManager::class,
-            CategoryResource\RelationManagers\CoursesRelationManager::class,
-            CategoryResource\RelationManagers\LeadsRelationManager::class,
+            // CategoryResource\RelationManagers\UsersRelationManager::class,
+            // CategoryResource\RelationManagers\CoursesRelationManager::class,
+            // CategoryResource\RelationManagers\LeadsRelationManager::class,
         ];
     }
 

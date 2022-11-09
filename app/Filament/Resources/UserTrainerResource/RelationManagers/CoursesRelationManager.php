@@ -27,7 +27,7 @@ class CoursesRelationManager extends RelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 Select::make('category_id')
                     ->rules(['required', 'exists:categories,id'])
                     ->relationship('category', 'name')
@@ -113,9 +113,6 @@ class CoursesRelationManager extends RelationManager
                                 ->columnSpan([
                                     'default' => 12,
                                 ]),
-
-                            Hidden::make('type')->default('trainer'),
-
                             DatePicker::make('starting_date')
                                 ->rules(['required', 'date'])
                                 ->placeholder('Starting Date')
@@ -147,7 +144,7 @@ class CoursesRelationManager extends RelationManager
                                 ]),
 
 
-                            Select::make('status')
+                            Select::make('training_method')
                                 ->rules(['required'])
                                 ->options([
                                     'online' => 'Online',

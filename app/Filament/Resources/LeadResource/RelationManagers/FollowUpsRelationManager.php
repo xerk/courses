@@ -25,7 +25,7 @@ class FollowUpsRelationManager extends HasManyRelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 TextInput::make('title')
                     ->rules(['required', 'max:255', 'string'])
                     ->placeholder('Title')
@@ -75,7 +75,7 @@ class FollowUpsRelationManager extends HasManyRelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -86,7 +86,7 @@ class FollowUpsRelationManager extends HasManyRelationManager
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

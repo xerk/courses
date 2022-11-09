@@ -16,8 +16,9 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('Note')->nullable();
-            $table->unsignedBigInteger('lead_id');
+            $table->unsignedBigInteger('lead_id')->nullable();
             $table->string('status')->nullable();
+            $table->unsignedBigInteger('company_lead_id')->nullable();
 
             $table->timestamps();
         });

@@ -26,7 +26,7 @@ class UsersRelationManager extends BelongsToManyRelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 TextInput::make('name')
                     ->rules(['required', 'max:255', 'string'])
                     ->placeholder('Name')
@@ -57,7 +57,7 @@ class UsersRelationManager extends BelongsToManyRelationManager
 
                 TextInput::make('email')
                     ->rules(['required', 'email'])
-                    ->unique('users', 'email', fn(?Model $record) => $record)
+                    ->unique('users', 'email', fn (?Model $record) => $record)
                     ->email()
                     ->placeholder('Email')
                     ->columnSpan([
@@ -78,9 +78,9 @@ class UsersRelationManager extends BelongsToManyRelationManager
 
                 TextInput::make('password')
                     ->password()
-                    ->dehydrateStateUsing(fn($state) => \Hash::make($state))
+                    ->dehydrateStateUsing(fn ($state) => \Hash::make($state))
                     ->required(
-                        fn(Component $livewire) => $livewire instanceof
+                        fn (Component $livewire) => $livewire instanceof
                             Pages\CreateUser
                     )
                     ->placeholder('Password')
@@ -217,7 +217,7 @@ class UsersRelationManager extends BelongsToManyRelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -228,7 +228,7 @@ class UsersRelationManager extends BelongsToManyRelationManager
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

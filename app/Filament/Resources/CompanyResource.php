@@ -4,13 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Models\Company;
 use Filament\{Tables, Forms};
-use Filament\Resources\{Form, Table, Resource};
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\{Form, Table, Resource};
 use App\Filament\Resources\CompanyResource\Pages;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class CompanyResource extends Resource
 {
@@ -26,7 +27,7 @@ class CompanyResource extends Resource
     {
         return $form->schema([
             Card::make()->schema([
-                Grid::make(['default' => 0])->schema([
+                Grid::make(['default' => 12])->schema([
                     TextInput::make('name')
                         ->rules(['required', 'max:255', 'string'])
                         ->placeholder('Name')
@@ -72,6 +73,14 @@ class CompanyResource extends Resource
                             'md' => 12,
                             'lg' => 12,
                         ]),
+
+                    SpatieMediaLibraryFileUpload::make('Contract')
+                        ->enableReordering()
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 12,
+                            'lg' => 12,
+                        ]),
                 ]),
             ]),
         ]);
@@ -97,7 +106,7 @@ class CompanyResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -108,7 +117,7 @@ class CompanyResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -124,8 +133,9 @@ class CompanyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CompanyResource\RelationManagers\UsersRelationManager::class,
-            CompanyResource\RelationManagers\TrainersRelationManager::class,
+            CompanyResource\RelationManagers\CoursesRelationManager::class,
+            // CompanyResource\RelationManagers\UsersRelationManager::class,
+            // CompanyResource\RelationManagers\TrainersRelationManager::class,
         ];
     }
 

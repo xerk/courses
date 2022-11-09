@@ -15,8 +15,6 @@ return new class extends Migration {
         Schema::create('course_user', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->enum('type', ['trainer', 'company'])->nullable();
             $table->date('starting_date')->nullable();
             $table->date('ending_date')->nullable();
             $table->date('joining_date')->nullable();

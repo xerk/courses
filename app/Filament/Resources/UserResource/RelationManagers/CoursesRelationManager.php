@@ -22,7 +22,7 @@ class CoursesRelationManager extends BelongsToManyRelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 BelongsToSelect::make('category_id')
                     ->rules(['required', 'exists:categories,id'])
                     ->relationship('category', 'name')
@@ -73,7 +73,7 @@ class CoursesRelationManager extends BelongsToManyRelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -84,7 +84,7 @@ class CoursesRelationManager extends BelongsToManyRelationManager
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

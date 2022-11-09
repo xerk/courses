@@ -9,16 +9,26 @@ use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FollowUpController;
+use App\Http\Controllers\Api\AssigmentController;
 use App\Http\Controllers\Api\UserCoursesController;
 use App\Http\Controllers\Api\CourseUsersController;
 use App\Http\Controllers\Api\CompanyLeadController;
+use App\Http\Controllers\Api\CourseGroupController;
 use App\Http\Controllers\Api\CompanyUsersController;
 use App\Http\Controllers\Api\CategoryUsersController;
 use App\Http\Controllers\Api\CategoryLeadsController;
 use App\Http\Controllers\Api\LeadFollowUpsController;
+use App\Http\Controllers\Api\UserAssigmentsController;
+use App\Http\Controllers\Api\CompanyCoursesController;
 use App\Http\Controllers\Api\CategoryCoursesController;
 use App\Http\Controllers\Api\CompanyTrainersController;
+use App\Http\Controllers\Api\CourseCompaniesController;
+use App\Http\Controllers\Api\UserCourseGroupsController;
+use App\Http\Controllers\Api\CourseGroupUsersController;
+use App\Http\Controllers\Api\CourseCourseGroupsController;
 use App\Http\Controllers\Api\CategoryCompanyLeadsController;
+use App\Http\Controllers\Api\CompanyLeadFollowUpsController;
+use App\Http\Controllers\Api\CourseGroupAssigmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +54,26 @@ Route::name('api.')
     ->group(function () {
         Route::apiResource('users', UserController::class);
 
+        // User Assigments
+        Route::get('/users/{user}/assigments', [
+            UserAssigmentsController::class,
+            'index',
+        ])->name('users.assigments.index');
+        Route::post('/users/{user}/assigments', [
+            UserAssigmentsController::class,
+            'store',
+        ])->name('users.assigments.store');
+
+        // User Course Groups
+        Route::get('/users/{user}/course-groups', [
+            UserCourseGroupsController::class,
+            'index',
+        ])->name('users.course-groups.index');
+        Route::post('/users/{user}/course-groups', [
+            UserCourseGroupsController::class,
+            'store',
+        ])->name('users.course-groups.store');
+
         // User Courses
         Route::get('/users/{user}/courses', [
             UserCoursesController::class,
@@ -57,6 +87,20 @@ Route::name('api.')
             UserCoursesController::class,
             'destroy',
         ])->name('users.courses.destroy');
+
+        // User Course Groups2
+        Route::get('/users/{user}/course-groups', [
+            UserCourseGroupsController::class,
+            'index',
+        ])->name('users.course-groups.index');
+        Route::post('/users/{user}/course-groups/{courseGroup}', [
+            UserCourseGroupsController::class,
+            'store',
+        ])->name('users.course-groups.store');
+        Route::delete('/users/{user}/course-groups/{courseGroup}', [
+            UserCourseGroupsController::class,
+            'destroy',
+        ])->name('users.course-groups.destroy');
 
         Route::apiResource('categories', CategoryController::class);
 
@@ -122,7 +166,31 @@ Route::name('api.')
             'store',
         ])->name('companies.trainers.store');
 
+        // Company Courses
+        Route::get('/companies/{company}/courses', [
+            CompanyCoursesController::class,
+            'index',
+        ])->name('companies.courses.index');
+        Route::post('/companies/{company}/courses/{course}', [
+            CompanyCoursesController::class,
+            'store',
+        ])->name('companies.courses.store');
+        Route::delete('/companies/{company}/courses/{course}', [
+            CompanyCoursesController::class,
+            'destroy',
+        ])->name('companies.courses.destroy');
+
         Route::apiResource('courses', CourseController::class);
+
+        // Course Course Groups
+        Route::get('/courses/{course}/course-groups', [
+            CourseCourseGroupsController::class,
+            'index',
+        ])->name('courses.course-groups.index');
+        Route::post('/courses/{course}/course-groups', [
+            CourseCourseGroupsController::class,
+            'store',
+        ])->name('courses.course-groups.store');
 
         // Course Users
         Route::get('/courses/{course}/users', [
@@ -138,6 +206,20 @@ Route::name('api.')
             'destroy',
         ])->name('courses.users.destroy');
 
+        // Course Companies
+        Route::get('/courses/{course}/companies', [
+            CourseCompaniesController::class,
+            'index',
+        ])->name('courses.companies.index');
+        Route::post('/courses/{course}/companies/{company}', [
+            CourseCompaniesController::class,
+            'store',
+        ])->name('courses.companies.store');
+        Route::delete('/courses/{course}/companies/{company}', [
+            CourseCompaniesController::class,
+            'destroy',
+        ])->name('courses.companies.destroy');
+
         Route::apiResource('leads', LeadController::class);
 
         // Lead Follow Ups
@@ -151,4 +233,42 @@ Route::name('api.')
         ])->name('leads.follow-ups.store');
 
         Route::apiResource('company-leads', CompanyLeadController::class);
+
+        // CompanyLead Follow Ups
+        Route::get('/company-leads/{companyLead}/follow-ups', [
+            CompanyLeadFollowUpsController::class,
+            'index',
+        ])->name('company-leads.follow-ups.index');
+        Route::post('/company-leads/{companyLead}/follow-ups', [
+            CompanyLeadFollowUpsController::class,
+            'store',
+        ])->name('company-leads.follow-ups.store');
+
+        Route::apiResource('course-groups', CourseGroupController::class);
+
+        // CourseGroup Assigments
+        Route::get('/course-groups/{courseGroup}/assigments', [
+            CourseGroupAssigmentsController::class,
+            'index',
+        ])->name('course-groups.assigments.index');
+        Route::post('/course-groups/{courseGroup}/assigments', [
+            CourseGroupAssigmentsController::class,
+            'store',
+        ])->name('course-groups.assigments.store');
+
+        // CourseGroup Users
+        Route::get('/course-groups/{courseGroup}/users', [
+            CourseGroupUsersController::class,
+            'index',
+        ])->name('course-groups.users.index');
+        Route::post('/course-groups/{courseGroup}/users/{user}', [
+            CourseGroupUsersController::class,
+            'store',
+        ])->name('course-groups.users.store');
+        Route::delete('/course-groups/{courseGroup}/users/{user}', [
+            CourseGroupUsersController::class,
+            'destroy',
+        ])->name('course-groups.users.destroy');
+
+        Route::apiResource('assigments', AssigmentController::class);
     });

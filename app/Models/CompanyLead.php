@@ -40,4 +40,9 @@ class CompanyLead extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function followUps()
+    {
+        return $this->hasMany(FollowUp::class);
+    }
 }

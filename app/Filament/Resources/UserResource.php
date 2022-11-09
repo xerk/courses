@@ -19,6 +19,7 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\MorphToSelect;
 use App\Filament\Resources\UserResource\Pages;
 use Filament\Resources\{Form, Table, Resource};
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class UserResource extends Resource
 {
@@ -33,7 +34,7 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query()->where('type', 'admin');
+        return parent::getEloquentQuery()->where('type', 'admin');
     }
 
     public static function form(Form $form): Form
@@ -44,10 +45,30 @@ class UserResource extends Resource
         ]);
     }
 
-    public static function getUserForm($type = 'admin')
+    public static function getTypeForm($type, $typeDisplay)
+    {
+        if ($typeDisplay) {
+            return Select::make('type')
+                ->rules(['nullable', 'exists:categories,id'])
+                ->options([
+                    'employee' => 'Employee',
+                    'instructor' => 'Instructor',
+                ])
+                ->searchable()
+                ->placeholder('Select Type')
+                ->columnSpan([
+                    'default' => 12,
+                    'md' => 12,
+                    'lg' => 4,
+                ]);
+        }
+        return Hidden::make('type')->default($type);
+    }
+
+    public static function getUserForm($type = 'admin', $typeDisplay = false)
     {
         return Section::make('User Information')->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 FileUpload::make('avatar')
                     ->rules(['nullable', 'file'])
                     ->image()
@@ -159,7 +180,7 @@ class UserResource extends Resource
                         'lg' => 6,
                     ]),
 
-                Hidden::make('token')->default($type),
+                static::getTypeForm($type, $typeDisplay),
                 Select::make('category_id')
                     ->rules(['nullable', 'exists:categories,id'])
                     ->relationship('category', 'name')
@@ -198,6 +219,16 @@ class UserResource extends Resource
                         'default' => 12,
                         'md' => 12,
                         'lg' => 6,
+                    ]),
+
+
+                SpatieMediaLibraryFileUpload::make('documents')
+                    ->multiple()
+                    ->enableReordering()
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
                     ]),
             ]),
         ]);
@@ -270,7 +301,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            UserResource\RelationManagers\DocumentsRelationManager::class,
+            // UserResource\RelationManagers\DocumentsRelationManager::class,
         ];
     }
 

@@ -22,7 +22,7 @@ class DocumentsRelationManager extends MorphManyRelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 0])->schema([
+            Grid::make(['default' => 12])->schema([
                 FileUpload::make('file')
                     ->rules(['nullable', 'file'])
                     ->placeholder('File')
@@ -101,7 +101,7 @@ class DocumentsRelationManager extends MorphManyRelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -112,7 +112,7 @@ class DocumentsRelationManager extends MorphManyRelationManager
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

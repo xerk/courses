@@ -48,6 +48,16 @@
                         Company Leads
                         </x-dropdown-link>
                         @endcan
+                        @can('view-any', App\Models\CourseGroup::class)
+                        <x-dropdown-link href="{{ route('course-groups.index') }}">
+                        Course Groups
+                        </x-dropdown-link>
+                        @endcan
+                        @can('view-any', App\Models\Assigment::class)
+                        <x-dropdown-link href="{{ route('assigments.index') }}">
+                        Assigments
+                        </x-dropdown-link>
+                        @endcan
                 </x-nav-dropdown>
 
             </div>
@@ -129,6 +139,16 @@
                 @can('view-any', App\Models\CompanyLead::class)
                 <x-responsive-nav-link href="{{ route('company-leads.index') }}">
                 Company Leads
+                </x-responsive-nav-link>
+                @endcan
+                @can('view-any', App\Models\CourseGroup::class)
+                <x-responsive-nav-link href="{{ route('course-groups.index') }}">
+                Course Groups
+                </x-responsive-nav-link>
+                @endcan
+                @can('view-any', App\Models\Assigment::class)
+                <x-responsive-nav-link href="{{ route('assigments.index') }}">
+                Assigments
                 </x-responsive-nav-link>
                 @endcan
 

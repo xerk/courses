@@ -35,7 +35,7 @@ class UserEmployeeResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            UserResource::getUserForm('employee'),
+            UserResource::getUserForm('employee', true),
             UserResource::getUserRoleForm(),
 
             Section::make('Employee Data')->relationship('employee')->schema([

@@ -26,13 +26,6 @@ return new class extends Migration {
                 ->on('courses')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
-
-            $table
-                ->foreign('company_id')
-                ->references('id')
-                ->on('companies')
-                ->onUpdate('CASCADE')
-                ->onDelete('CASCADE');
         });
     }
 
@@ -46,7 +39,6 @@ return new class extends Migration {
         Schema::table('course_user', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['course_id']);
-            $table->dropForeign(['company_id']);
         });
     }
 };

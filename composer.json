@@ -12,12 +12,12 @@
         "bezhansalleh/filament-shield": "^2.2",
         "filament/filament": "^2.0",
         "filament/notifications": "^2.0",
+        "filament/spatie-laravel-media-library-plugin": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "livewire/livewire": "^2.5",
-        "shuvroroy/filament-spatie-laravel-backup": "^1.2"
+        "livewire/livewire": "^2.5"
     },
     "require-dev": {
         "doctrine/dbal": "^3.5",

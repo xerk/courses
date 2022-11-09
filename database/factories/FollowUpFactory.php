@@ -27,6 +27,7 @@ class FollowUpFactory extends Factory
             'Note' => $this->faker->text,
             'status' => $this->faker->word,
             'lead_id' => \App\Models\Lead::factory(),
+            'company_lead_id' => \App\Models\CompanyLead::factory(),
         ];
     }
 }

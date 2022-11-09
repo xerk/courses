@@ -11,7 +11,13 @@ class FollowUp extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['title', 'Note', 'lead_id', 'status'];
+    protected $fillable = [
+        'title',
+        'Note',
+        'lead_id',
+        'status',
+        'company_lead_id',
+    ];
 
     protected $searchableFields = ['*'];
 
@@ -20,5 +26,10 @@ class FollowUp extends Model
     public function lead()
     {
         return $this->belongsTo(Lead::class);
+    }
+
+    public function companyLead()
+    {
+        return $this->belongsTo(CompanyLead::class);
     }
 }

@@ -145,4 +145,36 @@ return [
             'note' => 'Note',
         ],
     ],
+
+    'course_groups' => [
+        'name' => 'Course Groups',
+        'index_title' => 'CourseGroups List',
+        'new_title' => 'New Course group',
+        'create_title' => 'Create CourseGroup',
+        'edit_title' => 'Edit CourseGroup',
+        'show_title' => 'Show CourseGroup',
+        'inputs' => [
+            'user_id' => 'User',
+            'course_id' => 'Course',
+            'name' => 'Name',
+        ],
+    ],
+
+    'assigments' => [
+        'name' => 'Assigments',
+        'index_title' => 'Assigments List',
+        'new_title' => 'New Assigment',
+        'create_title' => 'Create Assigment',
+        'edit_title' => 'Edit Assigment',
+        'show_title' => 'Show Assigment',
+        'inputs' => [
+            'user_id' => 'User',
+            'course_group_id' => 'Course Group',
+            'title' => 'Title',
+            'file' => 'File',
+            'dead_line' => 'Dead Line',
+            'points' => 'Points',
+            'body' => 'Body',
+        ],
+    ],
 ];

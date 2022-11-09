@@ -19,6 +19,13 @@ return new class extends Migration {
                 ->on('leads')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
+
+            $table
+                ->foreign('company_lead_id')
+                ->references('id')
+                ->on('company_leads')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
@@ -31,6 +38,7 @@ return new class extends Migration {
     {
         Schema::table('follow_ups', function (Blueprint $table) {
             $table->dropForeign(['lead_id']);
+            $table->dropForeign(['company_lead_id']);
         });
     }
 };

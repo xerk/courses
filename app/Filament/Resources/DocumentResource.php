@@ -28,7 +28,7 @@ class DocumentResource extends Resource
     {
         return $form->schema([
             Card::make()->schema([
-                Grid::make(['default' => 0])->schema([
+                Grid::make(['default' => 12])->schema([
                     FileUpload::make('file')
                         ->rules(['nullable', 'file'])
                         ->placeholder('File')
@@ -108,7 +108,7 @@ class DocumentResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -119,7 +119,7 @@ class DocumentResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

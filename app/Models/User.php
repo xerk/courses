@@ -4,14 +4,17 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use Notifiable;
     use HasFactory;
@@ -19,6 +22,7 @@ class User extends Authenticatable
     use SoftDeletes;
     use HasApiTokens;
     use HasRoles; //or HasFilamentShield
+    use InteractsWithMedia;
 
     protected $fillable = [
         'username',
@@ -47,6 +51,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly($this->fillable);
+    }
+
     public function trainer()
     {
         return $this->hasOne(Trainer::class);
@@ -71,6 +81,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class);
     }
+    
+    public function courseGroups()
+    {
+        return $this->belongsToMany(CourseGroup::class);
+    }
 
     public function documents()
     {
@@ -82,7 +97,5 @@ class User extends Authenticatable
         return in_array($this->email, config('auth.super_admins'));
     }
 
-    public function scopeAdmin($query) {
-        return $query->where('type', 'admin');
-    }
+    
 }

@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->date('end_date')->nullable();
             $table->string('category_approved')->nullable();
             $table->string('status')->nullable();
-            $table->string('note')->nullable();
+            $table->text('note')->nullable();
 
             $table->timestamps();
         });

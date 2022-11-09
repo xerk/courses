@@ -4,15 +4,15 @@ namespace App\Filament\Resources;
 
 use App\Models\Course;
 use Filament\{Tables, Forms};
-use Filament\Resources\{Form, Table, Resource};
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\BelongsToSelect;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Resources\{Form, Table, Resource};
 use App\Filament\Resources\CourseResource\Pages;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class CourseResource extends Resource
 {
@@ -28,7 +28,7 @@ class CourseResource extends Resource
     {
         return $form->schema([
             Card::make()->schema([
-                Grid::make(['default' => 0])->schema([
+                Grid::make(['default' => 12])->schema([
                     BelongsToSelect::make('category_id')
                         ->rules(['required', 'exists:categories,id'])
                         ->relationship('category', 'name')
@@ -57,6 +57,15 @@ class CourseResource extends Resource
                             'md' => 12,
                             'lg' => 12,
                         ]),
+
+                    SpatieMediaLibraryFileUpload::make('documents')
+                        ->multiple()
+                        ->enableReordering()
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 12,
+                            'lg' => 12,
+                        ]),
                 ]),
             ]),
         ]);
@@ -80,7 +89,7 @@ class CourseResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -91,7 +100,7 @@ class CourseResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -112,8 +121,7 @@ class CourseResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CourseResource\RelationManagers\UsersRelationManager::class,
-            CourseResource\RelationManagers\DocumentsRelationManager::class,
+            // CourseResource\RelationManagers\DocumentsRelationManager::class
         ];
     }
 
