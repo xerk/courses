@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\AssigmentAnswer;
+use App\Models\UserInstructor;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AssigmentAnswerPolicy
+class UserInstructorPolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +18,19 @@ class AssigmentAnswerPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->can('view_any_assigment::answer');
+        return $user->can('view_any_user::instructor');
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\AssigmentAnswer  $assigmentAnswer
+     * @param  \App\Models\UserInstructor  $userInstructor
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, AssigmentAnswer $assigmentAnswer)
+    public function view(User $user, UserInstructor $userInstructor)
     {
-        return $user->can('view_assigment::answer');
+        return $user->can('view_user::instructor');
     }
 
     /**
@@ -41,31 +41,31 @@ class AssigmentAnswerPolicy
      */
     public function create(User $user)
     {
-        return $user->can('create_assigment::answer');
+        return $user->can('create_user::instructor');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\AssigmentAnswer  $assigmentAnswer
+     * @param  \App\Models\UserInstructor  $userInstructor
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, AssigmentAnswer $assigmentAnswer)
+    public function update(User $user, UserInstructor $userInstructor)
     {
-        return $user->can('update_assigment::answer');
+        return $user->can('update_user::instructor');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\AssigmentAnswer  $assigmentAnswer
+     * @param  \App\Models\UserInstructor  $userInstructor
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, AssigmentAnswer $assigmentAnswer)
+    public function delete(User $user, UserInstructor $userInstructor)
     {
-        return $user->can('delete_assigment::answer');
+        return $user->can('delete_user::instructor');
     }
 
     /**
@@ -76,19 +76,19 @@ class AssigmentAnswerPolicy
      */
     public function deleteAny(User $user)
     {
-        return $user->can('delete_any_assigment::answer');
+        return $user->can('delete_any_user::instructor');
     }
 
     /**
      * Determine whether the user can permanently delete.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\AssigmentAnswer  $assigmentAnswer
+     * @param  \App\Models\UserInstructor  $userInstructor
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, AssigmentAnswer $assigmentAnswer)
+    public function forceDelete(User $user, UserInstructor $userInstructor)
     {
-        return $user->can('force_delete_assigment::answer');
+        return $user->can('force_delete_user::instructor');
     }
 
     /**
@@ -99,19 +99,19 @@ class AssigmentAnswerPolicy
      */
     public function forceDeleteAny(User $user)
     {
-        return $user->can('force_delete_any_assigment::answer');
+        return $user->can('force_delete_any_user::instructor');
     }
 
     /**
      * Determine whether the user can restore.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\AssigmentAnswer  $assigmentAnswer
+     * @param  \App\Models\UserInstructor  $userInstructor
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, AssigmentAnswer $assigmentAnswer)
+    public function restore(User $user, UserInstructor $userInstructor)
     {
-        return $user->can('restore_assigment::answer');
+        return $user->can('restore_user::instructor');
     }
 
     /**
@@ -122,19 +122,19 @@ class AssigmentAnswerPolicy
      */
     public function restoreAny(User $user)
     {
-        return $user->can('restore_any_assigment::answer');
+        return $user->can('restore_any_user::instructor');
     }
 
     /**
      * Determine whether the user can replicate.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\AssigmentAnswer  $assigmentAnswer
+     * @param  \App\Models\UserInstructor  $userInstructor
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function replicate(User $user, AssigmentAnswer $assigmentAnswer)
+    public function replicate(User $user, UserInstructor $userInstructor)
     {
-        return $user->can('replicate_assigment::answer');
+        return $user->can('replicate_user::instructor');
     }
 
     /**
@@ -145,7 +145,7 @@ class AssigmentAnswerPolicy
      */
     public function reorder(User $user)
     {
-        return $user->can('reorder_assigment::answer');
+        return $user->can('reorder_user::instructor');
     }
 
 }

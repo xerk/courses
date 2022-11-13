@@ -18,6 +18,7 @@ use Filament\Forms\Components\BelongsToSelect;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Resources\{Form, Table, Resource};
 use App\Filament\Resources\AssigmentAnswerResource\Pages;
+use App\Models\UserTrainer;
 
 class AssigmentAnswerResource extends Resource
 {
@@ -83,7 +84,7 @@ class AssigmentAnswerResource extends Resource
             ->rules(['required'])
             ->relationship('user', 'name')
             ->options(function () {
-                return User::where('type', 'trainer')->get()->pluck('name', 'id');
+                return UserTrainer::all()->pluck('name', 'id');
             })
             ->default(auth()->user()->id)
             ->searchable()

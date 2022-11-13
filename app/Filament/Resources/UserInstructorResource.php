@@ -2,25 +2,25 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\UserEmployee;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\EmployeeResource;
-use App\Filament\Resources\UserAdminResource;
 use Filament\Resources\{Form, Table, Resource};
-use App\Filament\Resources\UserEmployeeResource\Pages;
+use App\Filament\Resources\UserInstructorResource\Pages;
+use App\Models\UserInstructor;
+use App\Filament\Resources\UserAdminResource;
 
-class UserEmployeeResource extends Resource
+class UserInstructorResource extends Resource
 {
-    protected static ?string $model = UserEmployee::class;
+    protected static ?string $model = UserInstructor::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $label = 'Employee';
+    protected static ?string $label = 'Instructor';
 
-    protected static ?string $slug = 'user-employees';
+    protected static ?string $slug = 'user-instructors';
 
     protected static ?string $navigationGroup = 'User Managment';
 
@@ -31,10 +31,10 @@ class UserEmployeeResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            UserAdminResource::getUserForm('employee', true),
+            UserAdminResource::getUserForm('instructor'),
             UserAdminResource::getUserRoleForm(),
 
-            Section::make('Employee Data')->relationship('employee')->schema([
+            Section::make('Instructor Data')->relationship('Instructor')->schema([
                 EmployeeResource::getEmployeeForm()
             ])
         ]);
@@ -106,9 +106,9 @@ class UserEmployeeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUserEmployees::route('/'),
-            'create' => Pages\CreateUserEmployee::route('/create'),
-            'edit' => Pages\EditUserEmployee::route('/{record}/edit'),
+            'index' => Pages\ListUserInstructors::route('/'),
+            'create' => Pages\CreateUserInstructor::route('/create'),
+            'edit' => Pages\EditUserInstructor::route('/{record}/edit'),
         ];
     }
 }

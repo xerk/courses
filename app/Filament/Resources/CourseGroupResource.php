@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Models\User;
 use App\Models\CourseGroup;
 use Filament\{Tables, Forms};
+use App\Models\UserInstructor;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -34,7 +35,7 @@ class CourseGroupResource extends Resource
                         ->label('Instractor')
                         ->rules(['required', 'exists:users,id'])
                         ->options(function () {
-                            return User::where('type', 'instructor')->get()->pluck('name', 'id');
+                            return UserInstructor::all()->pluck('name', 'id');
                         })
                         ->searchable()
                         ->placeholder('Instractor')

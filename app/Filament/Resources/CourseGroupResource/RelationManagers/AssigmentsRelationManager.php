@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
+use App\Models\UserInstructor;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Resources\{Form, Table};
@@ -44,7 +45,7 @@ class AssigmentsRelationManager extends HasManyRelationManager
                     ->label('Instructor')
                     ->rules(['required', 'exists:users,id'])
                     ->options(function () {
-                        return User::where('type', 'instructor')->get()->pluck('name', 'id');
+                        return UserInstructor::all()->pluck('name', 'id');
                     })
                     ->searchable()
                     ->placeholder('Select instructor')

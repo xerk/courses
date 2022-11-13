@@ -20,6 +20,7 @@ use Filament\Forms\Components\BelongsToSelect;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Resources\{Form, Table, Resource};
 use App\Filament\Resources\AssigmentResource\Pages;
+use App\Models\UserInstructor;
 
 class AssigmentResource extends Resource
 {
@@ -56,7 +57,7 @@ class AssigmentResource extends Resource
                         ->rules(['required', 'exists:users,id'])
                         ->relationship('user', 'name')
                         ->options(function () {
-                            return User::where('type', 'instractor')->get()->pluck('name', 'id');
+                            return UserInstructor::all()->pluck('name', 'id');
                         })
                         ->searchable()
                         ->placeholder('Select an instructor')

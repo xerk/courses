@@ -27,10 +27,10 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     use InteractsWithMedia;
 
     protected $childTypes = [
+        'instructor' => UserInstructor::class,
         'employee' => UserEmployee::class,
-        'instructor' => UserEmployee::class,
         'trainer' => UserTrainer::class,
-        'admin' => User::class,
+        'admin' => UserAdmin::class,
     ];
 
     protected $fillable = [
@@ -52,6 +52,7 @@ class User extends Authenticatable implements HasMedia, HasAvatar
         'company_id',
     ];
 
+    protected $guard_name = 'web';
     protected $searchableFields = ['*'];
 
     protected $hidden = ['password', 'remember_token'];
@@ -60,11 +61,11 @@ class User extends Authenticatable implements HasMedia, HasAvatar
         'email_verified_at' => 'datetime',
     ];
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly($this->fillable);
-    }
+    // public function getActivitylogOptions(): LogOptions
+    // {
+    //     return LogOptions::defaults()
+    //         ->logOnly($this->fillable);
+    // }
 
     public function trainer()
     {
@@ -90,7 +91,7 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     {
         return $this->belongsToMany(Course::class, 'course_user', 'course_id', 'user_id');
     }
-    
+
     public function courseGroups()
     {
         return $this->belongsToMany(CourseGroup::class);

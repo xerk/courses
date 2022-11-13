@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Parental\HasParent;
 
-class UserEmployee extends User
+class UserInstructor extends User
 {
     use HasParent;
-
 }

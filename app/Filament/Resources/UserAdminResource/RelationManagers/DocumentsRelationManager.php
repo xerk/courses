@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Resources\UserAdminResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Models\User;
 use Livewire\Component;
 use Filament\Pages\Page;
+use App\Models\UserAdmin;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
@@ -20,13 +21,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\MorphToSelect;
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserAdminResource\Pages;
 use Filament\Resources\{Form, Table, Resource};
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
-class UserResource extends Resource
+class UserAdminResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = UserAdmin::class;
+
+    protected static ?string $label = 'Admins';
 
     protected static ?string $navigationGroup = 'User Managment';
 
@@ -37,7 +40,7 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('type', 'admin');
+        return parent::getEloquentQuery();
     }
 
     public static function form(Form $form): Form
@@ -301,7 +304,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // UserResource\RelationManagers\DocumentsRelationManager::class,
+            // UserAdminResource\RelationManagers\DocumentsRelationManager::class,
         ];
     }
 

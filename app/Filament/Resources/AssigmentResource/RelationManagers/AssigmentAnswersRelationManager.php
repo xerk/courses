@@ -5,6 +5,7 @@ namespace App\Filament\Resources\AssigmentResource\RelationManagers;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
+use App\Models\UserTrainer;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
@@ -59,7 +60,7 @@ class AssigmentAnswersRelationManager extends RelationManager
             ->rules(['required'])
             ->relationship('user', 'name')
             ->options(function () {
-                return User::where('type', 'trainer')->get()->pluck('name', 'id');
+                return UserTrainer::all()->pluck('name', 'id');
             })
             ->searchable()
             ->placeholder('User')

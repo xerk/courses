@@ -40,8 +40,8 @@ class UserTrainerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            UserResource::getUserForm('trainer'),
-            UserResource::getUserRoleForm(),
+            UserAdminResource::getUserForm('trainer'),
+            UserAdminResource::getUserRoleForm(),
 
             Section::make('Student Data')->relationship('trainer')->schema([
                 TrainerResource::getTrainerForm()
