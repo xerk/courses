@@ -36,4 +36,9 @@ class Assigment extends Model
     {
         return $this->belongsTo(CourseGroup::class);
     }
+
+    public function assigmentAnswers()
+    {
+        return $this->hasMany(AssigmentAnswer::class);
+    }
 }

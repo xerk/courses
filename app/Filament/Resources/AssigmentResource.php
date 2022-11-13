@@ -31,6 +31,20 @@ class AssigmentResource extends Resource
 
     protected static ?string $navigationGroup = 'Main';
 
+    public static function getEloquentQuery(): Builder
+    {
+        $query = static::getModel()::query();
+        if (auth()->user()->type === 'trainer') {
+            $query->whereHas('courseGroup', function ($q) {
+                $q->whereHas('users', function ($q) {
+                    $q->where('type', 'trainer')->where('id', auth()->user()->id);
+                });
+            });
+        }
+
+        return $query;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -135,6 +149,7 @@ class AssigmentResource extends Resource
                         return 'warning';
                     }
                 }),
+                Tables\Columns\TextColumn::make('assigment_answers_count')->counts('assigmentAnswers')->hidden(auth()->user()->type == 'trainer'),
                 Tables\Columns\TextColumn::make('points'),
                 // Tables\Columns\TextColumn::make('body')->limit(50),
             ])
@@ -184,7 +199,9 @@ class AssigmentResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            AssigmentResource\RelationManagers\AssigmentAnswersRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
@@ -192,6 +209,7 @@ class AssigmentResource extends Resource
         return [
             'index' => Pages\ListAssigments::route('/'),
             'create' => Pages\CreateAssigment::route('/create'),
+            'view' => Pages\ViewAssigment::route('/{record}'),
             'edit' => Pages\EditAssigment::route('/{record}/edit'),
         ];
     }

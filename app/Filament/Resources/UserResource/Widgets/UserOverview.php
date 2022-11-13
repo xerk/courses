@@ -14,7 +14,7 @@ class UserOverview extends BaseWidget
         $employee = User::where('type', 'employee');
         return [
             Card::make('Admins', User::where('type', 'admin')->count()),
-            Card::make('Trainers', $trainer->count()),
+            Card::make('Students', $trainer->count()),
             Card::make('Employee', $employee->count()),
         ];
     }

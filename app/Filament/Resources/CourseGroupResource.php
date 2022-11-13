@@ -31,12 +31,13 @@ class CourseGroupResource extends Resource
             Card::make()->schema([
                 Grid::make(['default' => 12])->schema([
                     Select::make('user_id')
+                        ->label('Instractor')
                         ->rules(['required', 'exists:users,id'])
                         ->options(function () {
-                            return User::where('type', 'trainer')->get()->pluck('name', 'id');
+                            return User::where('type', 'instructor')->get()->pluck('name', 'id');
                         })
                         ->searchable()
-                        ->placeholder('User')
+                        ->placeholder('Instractor')
                         ->columnSpan([
                             'default' => 12,
                             'md' => 12,
@@ -132,6 +133,7 @@ class CourseGroupResource extends Resource
         return [
             'index' => Pages\ListCourseGroups::route('/'),
             'create' => Pages\CreateCourseGroup::route('/create'),
+            'view' => Pages\ViewCourseGroup::route('/{record}'),
             'edit' => Pages\EditCourseGroup::route('/{record}/edit'),
         ];
     }

@@ -4,16 +4,16 @@ namespace App\Filament\Resources\CourseResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Resources\{Form, Table};
 use Livewire\Component;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Resources\{Form, Table};
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\BelongsToSelect;
-use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\CourseResource\Pages;
 use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
 
@@ -130,7 +130,7 @@ class UsersRelationManager extends BelongsToManyRelationManager
                     ->rules(['nullable', 'in:trainer,employee,admin'])
                     ->searchable()
                     ->options([
-                        'trainer' => 'Trainer',
+                        'trainer' => 'Student',
                         'employee' => 'Employee',
                         'admin' => 'Admin',
                     ])
@@ -198,7 +198,7 @@ class UsersRelationManager extends BelongsToManyRelationManager
                 Tables\Columns\TextColumn::make('address')->limit(50),
                 Tables\Columns\TextColumn::make('inside_address')->limit(50),
                 Tables\Columns\TextColumn::make('type')->enum([
-                    'trainer' => 'Trainer',
+                    'trainer' => 'Student',
                     'employee' => 'Employee',
                     'admin' => 'Admin',
                 ]),

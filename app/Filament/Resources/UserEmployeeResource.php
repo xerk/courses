@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\User;
-use Livewire\Component;
+use App\Models\UserEmployee;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\EmployeeResource;
@@ -15,7 +13,7 @@ use App\Filament\Resources\UserEmployeeResource\Pages;
 
 class UserEmployeeResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = UserEmployee::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -29,7 +27,7 @@ class UserEmployeeResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query()->where('type', 'employee');
+        return static::getModel()::query()->where('type', 'employee')->orWhere('type', 'instructor');
     }
 
     public static function form(Form $form): Form

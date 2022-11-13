@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\CourseGroupResource\RelationManagers;
 
+use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Resources\{Form, Table};
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -42,7 +44,7 @@ class AssigmentsRelationManager extends HasManyRelationManager
                     ->label('Instructor')
                     ->rules(['required', 'exists:users,id'])
                     ->options(function () {
-                        return User::where('type', 'instractor')->get()->pluck('name', 'id');
+                        return User::where('type', 'instructor')->get()->pluck('name', 'id');
                     })
                     ->searchable()
                     ->placeholder('Select instructor')
@@ -100,7 +102,20 @@ class AssigmentsRelationManager extends HasManyRelationManager
                 Tables\Columns\TextColumn::make('user.name')->limit(50),
                 Tables\Columns\TextColumn::make('courseGroup.name')->limit(50),
                 Tables\Columns\TextColumn::make('title')->limit(50),
-                Tables\Columns\TextColumn::make('dead_line')->date(),
+                Tables\Columns\TextColumn::make('dead_line')->date()->color(function (TextColumn $column) {
+                    $date = new Carbon($column->getState());
+                    $now = new Carbon();
+                    // dd($date > $now,);
+                    if ($date < $now) {
+                        return 'danger';
+                    }
+                    if ($date->subDay() >= $now) {
+                        return 'success';
+                    }
+                    if (new Carbon($column->getState()) > $now) {
+                        return 'warning';
+                    }
+                }),
                 Tables\Columns\TextColumn::make('points'),
                 Tables\Columns\TextColumn::make('body')->limit(50),
             ])

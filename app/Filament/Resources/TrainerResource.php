@@ -82,9 +82,8 @@ class TrainerResource extends Resource
                     'lg' => 6,
                 ]),
 
-            TextInput::make('sufer_diseases')
+            Toggle::make('sufer_diseases')
                 ->rules(['nullable', 'max:255'])
-                ->placeholder('Sufer Diseases')
                 ->columnSpan([
                     'default' => 12,
                     'md' => 6,

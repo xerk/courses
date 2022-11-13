@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-
+use App\Models\UserEmployee;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class UserEmployeePolicy
 {
     use HandlesAuthorization;
 
@@ -18,18 +18,19 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->can('view_any_user');
+        return $user->can('view_any_user::employee');
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\UserEmployee  $userEmployee
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user)
+    public function view(User $user, UserEmployee $userEmployee)
     {
-        return $user->can('view_user');
+        return $user->can('view_user::employee');
     }
 
     /**
@@ -40,29 +41,31 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return $user->can('create_user');
+        return $user->can('create_user::employee');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\UserEmployee  $userEmployee
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user)
+    public function update(User $user, UserEmployee $userEmployee)
     {
-        return $user->can('update_user');
+        return $user->can('update_user::employee');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\UserEmployee  $userEmployee
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user)
+    public function delete(User $user, UserEmployee $userEmployee)
     {
-        return $user->can('delete_user');
+        return $user->can('delete_user::employee');
     }
 
     /**
@@ -73,18 +76,19 @@ class UserPolicy
      */
     public function deleteAny(User $user)
     {
-        return $user->can('delete_any_user');
+        return $user->can('delete_any_user::employee');
     }
 
     /**
      * Determine whether the user can permanently delete.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\UserEmployee  $userEmployee
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user)
+    public function forceDelete(User $user, UserEmployee $userEmployee)
     {
-        return $user->can('force_delete_user');
+        return $user->can('force_delete_user::employee');
     }
 
     /**
@@ -95,18 +99,19 @@ class UserPolicy
      */
     public function forceDeleteAny(User $user)
     {
-        return $user->can('force_delete_any_user');
+        return $user->can('force_delete_any_user::employee');
     }
 
     /**
      * Determine whether the user can restore.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\UserEmployee  $userEmployee
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user)
+    public function restore(User $user, UserEmployee $userEmployee)
     {
-        return $user->can('restore_user');
+        return $user->can('restore_user::employee');
     }
 
     /**
@@ -117,18 +122,19 @@ class UserPolicy
      */
     public function restoreAny(User $user)
     {
-        return $user->can('restore_any_user');
+        return $user->can('restore_any_user::employee');
     }
 
     /**
-     * Determine whether the user can bulk restore.
+     * Determine whether the user can replicate.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\UserEmployee  $userEmployee
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function replicate(User $user)
+    public function replicate(User $user, UserEmployee $userEmployee)
     {
-        return $user->can('replicate_user');
+        return $user->can('replicate_user::employee');
     }
 
     /**
@@ -139,6 +145,7 @@ class UserPolicy
      */
     public function reorder(User $user)
     {
-        return $user->can('reorder_user');
+        return $user->can('reorder_user::employee');
     }
+
 }

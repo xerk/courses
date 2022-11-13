@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
         $this->call(AssigmentSeeder::class);
+        $this->call(AssigmentAnswerSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(CompanySeeder::class);
         $this->call(CompanyLeadSeeder::class);

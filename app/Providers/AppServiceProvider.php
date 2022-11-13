@@ -3,9 +3,8 @@
 namespace App\Providers;
 
 use Filament\Facades\Filament;
-use Filament\Navigation\UserMenuItem;
 use Illuminate\Support\ServiceProvider;
-use Filament\Navigation\NavigationGroup;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {

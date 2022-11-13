@@ -23,12 +23,15 @@ use App\Http\Controllers\Api\CompanyCoursesController;
 use App\Http\Controllers\Api\CategoryCoursesController;
 use App\Http\Controllers\Api\CompanyTrainersController;
 use App\Http\Controllers\Api\CourseCompaniesController;
+use App\Http\Controllers\Api\AssigmentAnswerController;
 use App\Http\Controllers\Api\UserCourseGroupsController;
 use App\Http\Controllers\Api\CourseGroupUsersController;
 use App\Http\Controllers\Api\CourseCourseGroupsController;
+use App\Http\Controllers\Api\UserAssigmentAnswersController;
 use App\Http\Controllers\Api\CategoryCompanyLeadsController;
 use App\Http\Controllers\Api\CompanyLeadFollowUpsController;
 use App\Http\Controllers\Api\CourseGroupAssigmentsController;
+use App\Http\Controllers\Api\AssigmentAssigmentAnswersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +76,26 @@ Route::name('api.')
             UserCourseGroupsController::class,
             'store',
         ])->name('users.course-groups.store');
+
+        // User Assigment Answers
+        Route::get('/users/{user}/assigment-answers', [
+            UserAssigmentAnswersController::class,
+            'index',
+        ])->name('users.assigment-answers.index');
+        Route::post('/users/{user}/assigment-answers', [
+            UserAssigmentAnswersController::class,
+            'store',
+        ])->name('users.assigment-answers.store');
+
+        // User Assigment Answers2
+        Route::get('/users/{user}/assigment-answers', [
+            UserAssigmentAnswersController::class,
+            'index',
+        ])->name('users.assigment-answers.index');
+        Route::post('/users/{user}/assigment-answers', [
+            UserAssigmentAnswersController::class,
+            'store',
+        ])->name('users.assigment-answers.store');
 
         // User Courses
         Route::get('/users/{user}/courses', [
@@ -271,4 +294,19 @@ Route::name('api.')
         ])->name('course-groups.users.destroy');
 
         Route::apiResource('assigments', AssigmentController::class);
+
+        // Assigment Assigment Answers
+        Route::get('/assigments/{assigment}/assigment-answers', [
+            AssigmentAssigmentAnswersController::class,
+            'index',
+        ])->name('assigments.assigment-answers.index');
+        Route::post('/assigments/{assigment}/assigment-answers', [
+            AssigmentAssigmentAnswersController::class,
+            'store',
+        ])->name('assigments.assigment-answers.store');
+
+        Route::apiResource(
+            'assigment-answers',
+            AssigmentAnswerController::class
+        );
     });

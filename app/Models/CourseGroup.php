@@ -34,6 +34,6 @@ class CourseGroup extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(UserTrainer::class, 'course_group_user', 'course_group_id', 'user_id');
     }
 }

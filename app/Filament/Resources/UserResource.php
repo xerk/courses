@@ -4,9 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Models\User;
 use Livewire\Component;
+use Filament\Pages\Page;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -15,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\Pages\CreateRecord;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\MorphToSelect;
 use App\Filament\Resources\UserResource\Pages;
@@ -49,7 +52,6 @@ class UserResource extends Resource
     {
         if ($typeDisplay) {
             return Select::make('type')
-                ->rules(['nullable', 'exists:categories,id'])
                 ->options([
                     'employee' => 'Employee',
                     'instructor' => 'Instructor',
@@ -132,11 +134,9 @@ class UserResource extends Resource
 
                 TextInput::make('password')
                     ->password()
-                    ->dehydrateStateUsing(fn ($state) => \Hash::make($state))
-                    ->required(
-                        fn (Component $livewire) => $livewire instanceof
-                            Pages\CreateUser
-                    )
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->required(fn (Page $livewire) => ($livewire instanceof CreateRecord))
+                    ->dehydrated(fn ($state) => filled($state))
                     ->placeholder('Password')
                     ->columnSpan([
                         'default' => 12,
@@ -310,7 +310,6 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }

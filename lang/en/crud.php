@@ -177,4 +177,21 @@ return [
             'body' => 'Body',
         ],
     ],
+
+    'assigment_answers' => [
+        'name' => 'Assigment Answers',
+        'index_title' => 'AssigmentAnswers List',
+        'new_title' => 'New Assigment answer',
+        'create_title' => 'Create AssigmentAnswer',
+        'edit_title' => 'Edit AssigmentAnswer',
+        'show_title' => 'Show AssigmentAnswer',
+        'inputs' => [
+            'user_id' => 'User',
+            'assigment_id' => 'Assigment',
+            'instructor_id' => 'Instructor',
+            'file' => 'File',
+            'status' => 'Status',
+            'reason' => 'Reason',
+        ],
+    ],
 ];

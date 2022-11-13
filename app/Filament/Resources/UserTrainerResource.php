@@ -22,11 +22,11 @@ use App\Filament\Resources\UserTrainerResource\Pages;
 
 class UserTrainerResource extends Resource
 {
-    protected static ?string $label = 'Trainers';
+    protected static ?string $label = 'Students';
 
-    protected static ?string $slug = 'user-trainers';
+    protected static ?string $slug = 'user-students';
 
-    protected static ?string $model = User::class;
+    protected static ?string $model = UserTrainer::class;
 
     protected static ?string $navigationGroup = 'User Managment';
 
@@ -40,10 +40,10 @@ class UserTrainerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            UserResource::getUserForm('employee'),
+            UserResource::getUserForm('trainer'),
             UserResource::getUserRoleForm(),
 
-            Section::make('Trainer Data')->relationship('trainer')->schema([
+            Section::make('Student Data')->relationship('trainer')->schema([
                 TrainerResource::getTrainerForm()
             ])
         ]);

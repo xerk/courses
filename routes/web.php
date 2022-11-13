@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\CompanyLeadController;
 use App\Http\Controllers\CourseGroupController;
+use App\Http\Controllers\AssigmentAnswerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,5 @@ Route::prefix('/')
         Route::resource('company-leads', CompanyLeadController::class);
         Route::resource('course-groups', CourseGroupController::class);
         Route::resource('assigments', AssigmentController::class);
+        Route::resource('assigment-answers', AssigmentAnswerController::class);
     });

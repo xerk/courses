@@ -20,9 +20,9 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class UsersRelationManager extends RelationManager
 {
-    protected static ?string $label = 'Trainer';
+    protected static ?string $label = 'Stundet';
 
-    protected static ?string $pluralLabel = 'Trainers';
+    protected static ?string $pluralLabel = 'Students';
 
     protected static string $relationship = 'users';
 
@@ -32,23 +32,11 @@ class UsersRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->limit(50),
-                Tables\Columns\TextColumn::make('name_ar')->limit(50),
                 Tables\Columns\ImageColumn::make('avatar')->rounded(),
+                Tables\Columns\TextColumn::make('name')->limit(50),
                 Tables\Columns\TextColumn::make('email')->limit(50),
-                Tables\Columns\TextColumn::make('private_email')->limit(50),
                 Tables\Columns\TextColumn::make('phone')->limit(50),
-                Tables\Columns\TextColumn::make('phone2')->limit(50),
-                Tables\Columns\TextColumn::make('address')->limit(50),
-                Tables\Columns\TextColumn::make('inside_address')->limit(50),
-                Tables\Columns\TextColumn::make('type')->enum([
-                    'trainer' => 'Trainer',
-                    'employee' => 'Employee',
-                    'admin' => 'Admin',
-                ]),
                 Tables\Columns\TextColumn::make('category.name')->limit(50),
-                Tables\Columns\TextColumn::make('city')->limit(50),
-                Tables\Columns\TextColumn::make('country')->limit(50),
                 Tables\Columns\TextColumn::make('company.name')->limit(50),
             ])
             ->filters([
@@ -93,9 +81,9 @@ class UsersRelationManager extends RelationManager
                     'name'
                 ),
             ])->headerActions([
-                AttachAction::make()->label('Assign Trainer')->recordSelect(function (Select $select) {
+                AttachAction::make()->label('Assign Student')->recordSelect(function (Select $select) {
                     return $select->multiple();
-                })->recordSelectOptionsQuery(fn (Builder $query) => $query->whereRelation('courseGroups', 'type', '=', 'trainer'))
+                })->recordSelectOptionsQuery(fn (Builder $query) => $query->where('type', '=', 'trainer'))
             ])->actions([
                 // ...
                 Tables\Actions\DetachAction::make(),
