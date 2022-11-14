@@ -28,6 +28,16 @@ class UsersRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function enableAttchment()
+    {
+        if (auth()->user()->type === 'employee' || auth()->user()->type === 'admin') {
+            return [AttachAction::make()->label('Assign Student')->recordSelect(function (Select $select) {
+                return $select->multiple();
+            })->recordSelectOptionsQuery(fn (Builder $query) => $query->where('type', '=', 'trainer'))];
+        }
+        return [];
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -49,7 +59,7 @@ class UsersRelationManager extends RelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -60,7 +70,7 @@ class UsersRelationManager extends RelationManager
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -80,11 +90,9 @@ class UsersRelationManager extends RelationManager
                     'company',
                     'name'
                 ),
-            ])->headerActions([
-                AttachAction::make()->label('Assign Student')->recordSelect(function (Select $select) {
-                    return $select->multiple();
-                })->recordSelectOptionsQuery(fn (Builder $query) => $query->where('type', '=', 'trainer'))
-            ])->actions([
+            ])->headerActions(
+                static::enableAttchment()
+            )->actions([
                 // ...
                 Tables\Actions\DetachAction::make(),
             ])

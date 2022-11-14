@@ -26,6 +26,16 @@ class CourseGroupResource extends Resource
 
     protected static ?string $navigationGroup = 'Main';
 
+    public static function getEloquentQuery(): Builder
+    {
+        $query = static::getModel()::query();
+        if (auth()->user()->type === 'instructor') {
+            return $query->where('user_id', auth()->user()->id);
+        }
+
+        return $query;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([

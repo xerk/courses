@@ -50,34 +50,34 @@ class AssigmentAnswerResource extends Resource
     {
         return $form->schema([
             Card::make()->schema([
-                Grid::make(['default' => 12])->schema(array_merge(static::studentNotLogin(), [
-
-                    Select::make('assigment_id')
-                        ->rules(['required', 'exists:assigments,id'])
-                        ->relationship('assigment', 'title')
-                        ->searchable()
-                        ->placeholder('Assigment')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
-                        ]),
-
-                    FileUpload::make('file')
-                        ->rules(['nullable', 'file'])
-                        ->placeholder('File')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
-                        ]),
-                ])),
+                Grid::make(['default' => 12])->schema(
+                    static::studentNotLogin()
+                ),
             ]),
         ]);
     }
 
     public static function studentNotLogin()
     {
+        $assigmentId = Select::make('assigment_id')
+            ->rules(['required'])
+            ->relationship('assigment', 'title')
+            ->searchable()
+            ->placeholder('Assigment')
+            ->columnSpan([
+                'default' => 12,
+                'md' => 12,
+                'lg' => 12,
+            ]);
+
+        $file = FileUpload::make('file')
+            ->rules(['nullable', 'file'])
+            ->placeholder('File')
+            ->columnSpan([
+                'default' => 12,
+                'md' => 12,
+                'lg' => 12,
+            ]);
 
         $userId = Select::make('user_id')
             ->label('Student')
@@ -86,7 +86,6 @@ class AssigmentAnswerResource extends Resource
             ->options(function () {
                 return UserTrainer::all()->pluck('name', 'id');
             })
-            ->default(auth()->user()->id)
             ->searchable()
             ->placeholder('User')
             ->columnSpan([
@@ -133,16 +132,22 @@ class AssigmentAnswerResource extends Resource
                 'md' => 12,
                 'lg' => 12,
             ]);
-
+        $userIdHidden = Hidden::make('token')->default('');
         if (auth()->user()->type === 'trainer') {
             $points->hiddenOn(['create', 'edit']);
-            $userIdHidden = Hidden::make('user_id')->default(auth()->user()->id);
             $userId->hiddenOn(['create', 'edit']);
+            $userIdHidden = Hidden::make('user_id')->default(auth()->user()->id);
             $status->hiddenOn(['create', 'edit']);
             $reason->hiddenOn(['create', 'edit']);
+        } else if (auth()->user()->type === 'instructor') {
+            $assigmentId->hiddenOn(['edit']);
+            $file->hiddenOn(['edit']);
+            $userId->hiddenOn(['edit']);
         }
 
         return [
+            $assigmentId,
+            $file,
             $userIdHidden,
             $userId,
             $points,

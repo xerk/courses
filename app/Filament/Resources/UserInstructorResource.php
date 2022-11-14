@@ -34,7 +34,7 @@ class UserInstructorResource extends Resource
             UserAdminResource::getUserForm('instructor'),
             UserAdminResource::getUserRoleForm(),
 
-            Section::make('Instructor Data')->relationship('Instructor')->schema([
+            Section::make('Instructor Data')->relationship('employee')->schema([
                 EmployeeResource::getEmployeeForm()
             ])
         ]);

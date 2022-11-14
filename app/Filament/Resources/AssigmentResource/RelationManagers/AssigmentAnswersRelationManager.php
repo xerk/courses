@@ -40,21 +40,21 @@ class AssigmentAnswersRelationManager extends RelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 12])->schema(array_merge(static::studentNotLogin(), [
-                FileUpload::make('file')
-                    ->rules(['nullable', 'file'])
-                    ->placeholder('File')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
-            ])),
+            Grid::make(['default' => 12])->schema(static::studentNotLogin()),
         ]);
     }
 
     public static function studentNotLogin()
     {
+        $file = FileUpload::make('file')
+            ->rules(['nullable', 'file'])
+            ->placeholder('File')
+            ->columnSpan([
+                'default' => 12,
+                'md' => 12,
+                'lg' => 12,
+            ]);
+
         $userId = Select::make('user_id')
             ->label('Student')
             ->rules(['required'])
@@ -108,13 +108,16 @@ class AssigmentAnswersRelationManager extends RelationManager
                 'md' => 12,
                 'lg' => 12,
             ]);
-
+        $userIdHidden = Hidden::make('token')->default('');
         if (auth()->user()->type === 'trainer') {
             $points->hiddenOn(['create', 'edit']);
             $userIdHidden = Hidden::make('user_id')->default(auth()->user()->id);
             $userId->hiddenOn(['create', 'edit']);
             $status->hiddenOn(['create', 'edit']);
             $reason->hiddenOn(['create', 'edit']);
+        } else if (auth()->user()->type === 'instructor') {
+            $file->hiddenOn(['edit']);
+            $userId->hiddenOn(['edit']);
         }
 
         return [
@@ -149,7 +152,6 @@ class AssigmentAnswersRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')->limit(50)->label('Student'),
                 Tables\Columns\TextColumn::make('assigment.title')->limit(50),
-                Tables\Columns\TextColumn::make('instructor.name')->limit(50),
                 static::inlineTableEdit(),
                 Tables\Columns\TextColumn::make('reason')->limit(50),
                 Tables\Columns\TextColumn::make('points'),

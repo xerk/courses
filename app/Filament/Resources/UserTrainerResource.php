@@ -34,7 +34,12 @@ class UserTrainerResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query()->where('type', 'trainer');
+        $query = static::getModel()::query();
+        if (auth()->user()->type === 'instructor') {
+            $query->has('courseGroups');
+        }
+
+        return $query;
     }
 
     public static function form(Form $form): Form
@@ -73,7 +78,7 @@ class UserTrainerResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -84,7 +89,7 @@ class UserTrainerResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -114,7 +119,7 @@ class UserTrainerResource extends Resource
             UserTrainerResource\RelationManagers\DocumentsRelationManager::class,
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -122,5 +127,5 @@ class UserTrainerResource extends Resource
             'create' => Pages\CreateUserTrainer::route('/create'),
             'edit' => Pages\EditUserTrainer::route('/{record}/edit'),
         ];
-    }    
+    }
 }
