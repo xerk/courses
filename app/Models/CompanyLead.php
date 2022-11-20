@@ -18,11 +18,9 @@ class CompanyLead extends Model
         'business_email',
         'phone',
         'business_landline',
-        'complete_with',
         'category_id',
-        'start_date',
-        'end_date',
-        'category_approved',
+        'sub_category_id',
+        'sales_id',
         'status',
         'note',
     ];
@@ -30,11 +28,6 @@ class CompanyLead extends Model
     protected $searchableFields = ['*'];
 
     protected $table = 'company_leads';
-
-    protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-    ];
 
     public function category()
     {
@@ -44,5 +37,15 @@ class CompanyLead extends Model
     public function followUps()
     {
         return $this->hasMany(FollowUp::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function sales()
+    {
+        return $this->belongsTo(UserSaller::class, 'sales_id');
     }
 }

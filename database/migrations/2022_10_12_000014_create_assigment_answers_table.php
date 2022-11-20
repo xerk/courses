@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('assigment_id');
-            $table->unsignedBigInteger('instructor_id');
             $table->string('file')->nullable();
             $table
                 ->enum('status', [
@@ -27,6 +26,7 @@ return new class extends Migration {
                 ])
                 ->nullable();
             $table->text('reason')->nullable();
+            $table->integer('points')->nullable();
 
             $table->timestamps();
         });

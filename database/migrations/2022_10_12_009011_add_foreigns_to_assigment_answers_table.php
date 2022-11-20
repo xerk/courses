@@ -26,13 +26,6 @@ return new class extends Migration {
                 ->on('assigments')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
-
-            $table
-                ->foreign('instructor_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('CASCADE')
-                ->onDelete('CASCADE');
         });
     }
 
@@ -46,7 +39,6 @@ return new class extends Migration {
         Schema::table('assigment_answers', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['assigment_id']);
-            $table->dropForeign(['instructor_id']);
         });
     }
 };

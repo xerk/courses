@@ -18,7 +18,9 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "livewire/livewire": "^2.5"
+        "livewire/livewire": "^2.5",
+        "shuvroroy/filament-spatie-laravel-backup": "^1.2",
+        "z3d0x/filament-logger": "^0.4.1"
     },
     "require-dev": {
         "doctrine/dbal": "^3.5",

@@ -3,7 +3,9 @@
 namespace App\Filament\Resources;
 
 use Carbon\Carbon;
+use App\Models\Category;
 use App\Models\CompanyLead;
+use App\Models\SubCategory;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -20,24 +22,41 @@ use App\Filament\Resources\CompanyLeadResource\Pages;
 
 class CompanyLeadResource extends Resource
 {
+    protected static ?string $label = 'Sales Follow-ups';
+
+    protected static ?string $navigationGroup = 'Sales Protal';
+
     protected static ?string $model = CompanyLead::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationGroup = 'Main';
+    public static function getEloquentQuery(): Builder
+    {
+        $query = static::getModel()::query();
+        if (auth()->user()->type === 'sales') {
+            $query->where('sales_id', auth()->user()->id);
+        }
+
+        return $query;
+    }
 
     public static function form(Form $form): Form
     {
+        $followUps = Repeater::make('FollowUps')
+            ->relationship('followUps')
+            ->schema([
+                FollowUpResource::getFollowUpForm()
+            ])->columnSpan('full');
+        if (auth()->user()->type == 'sales') {
+            $followUps->disableItemDeletion();
+            $followUps->disableItemMovement();
+        }
         return $form->schema([
             static::getCompanyLeadForm(),
 
-            Repeater::make('FollowUps')
-                ->relationship('followUps')
-                ->schema([
-                    FollowUpResource::getFollowUpForm()
-                ])->columnSpan('full'),
+            $followUps
         ]);
     }
 
@@ -45,9 +64,22 @@ class CompanyLeadResource extends Resource
     {
         return Section::make('Company Lead')->schema([
             Grid::make(['default' => 12])->schema([
+                Select::make('sales_id')
+                    ->rules(['required'])
+                    ->relationship('sales', 'name')
+                    ->preload()
+                    ->searchable()
+                    ->placeholder('Select Sales')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
                 TextInput::make('name')
+                    ->label('Company Name')
                     ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Name')
+                    ->placeholder('Company Name')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 6,
@@ -55,25 +87,9 @@ class CompanyLeadResource extends Resource
                     ]),
 
                 TextInput::make('name_ar')
+                    ->label('Company Name AR')
                     ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Name Ar')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-                DatePicker::make('start_date')
-                    ->rules(['nullable', 'date'])
-                    ->placeholder('Start Date')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-
-                DatePicker::make('end_date')
-                    ->rules(['nullable', 'date'])
-                    ->placeholder('End Date')
+                    ->placeholder('Company Name AR')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 6,
@@ -117,29 +133,28 @@ class CompanyLeadResource extends Resource
                         'lg' => 6,
                     ]),
 
-                TextInput::make('complete_with')
-                    ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Complete With')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
-
                 Select::make('category_id')
-                    ->rules(['required', 'exists:categories,id'])
-                    ->relationship('category', 'name')
+                    ->rules(['required'])
+                    ->options(Category::all()->pluck('name', 'id')->toArray())
                     ->searchable()
                     ->placeholder('Category')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 6,
                         'lg' => 6,
-                    ]),
+                    ])
+                    ->reactive()
+                    ->afterStateUpdated(fn (callable $set) => $set('sub_category_id', null)),
 
-                TextInput::make('category_approved')
-                    ->rules(['nullable', 'max:255', 'string'])
-                    ->placeholder('Category Approved')
+                Select::make('sub_category_id')
+                    ->rules(['required'])
+                    ->options(function (callable $get) {
+                        $category = Category::find($get('category_id'));
+                        if (!$category) {
+                            return SubCategory::all()->pluck('name', 'id');
+                        }
+                        return $category->subCategories->pluck('name', 'id');
+                    })
                     ->columnSpan([
                         'default' => 12,
                         'md' => 6,

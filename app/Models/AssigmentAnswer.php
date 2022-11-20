@@ -14,10 +14,10 @@ class AssigmentAnswer extends Model
     protected $fillable = [
         'user_id',
         'assigment_id',
-        'instructor_id',
         'file',
         'status',
         'reason',
+        'points',
     ];
 
     protected $searchableFields = ['*'];
@@ -32,10 +32,5 @@ class AssigmentAnswer extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function instructor()
-    {
-        return $this->belongsTo(User::class, 'instructor_id');
     }
 }

@@ -58,6 +58,8 @@ class UserAdminResource extends Resource
                 ->options([
                     'employee' => 'Employee',
                     'instructor' => 'Instructor',
+                    'sales' => 'Sales',
+                    'accountant' => 'Accountant'
                 ])
                 ->searchable()
                 ->placeholder('Select Type')

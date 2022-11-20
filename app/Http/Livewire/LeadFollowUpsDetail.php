@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Lead;
 use Livewire\Component;
 use App\Models\FollowUp;
+use App\Models\CompanyLead;
 use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -15,6 +16,8 @@ class LeadFollowUpsDetail extends Component
 
     public Lead $lead;
     public FollowUp $followUp;
+    public $companyLeadsForSelect = [];
+    public $followUpNextFollowDate;
 
     public $selected = [];
     public $editing = false;
@@ -27,17 +30,26 @@ class LeadFollowUpsDetail extends Component
         'followUp.title' => ['required', 'max:255', 'string'],
         'followUp.Note' => ['nullable', 'max:255', 'string'],
         'followUp.status' => ['nullable', 'max:255', 'string'],
+        'followUp.company_lead_id' => ['nullable', 'exists:company_leads,id'],
+        'followUp.follow_up_from' => ['nullable', 'in:visit,email,call'],
+        'followUp.follow_date' => ['nullable', 'date'],
+        'followUpNextFollowDate' => ['nullable', 'date'],
     ];
 
     public function mount(Lead $lead)
     {
         $this->lead = $lead;
+        $this->companyLeadsForSelect = CompanyLead::pluck('name', 'id');
         $this->resetFollowUpData();
     }
 
     public function resetFollowUpData()
     {
         $this->followUp = new FollowUp();
+
+        $this->followUpNextFollowDate = null;
+        $this->followUp->company_lead_id = null;
+        $this->followUp->follow_up_from = 'visit';
 
         $this->dispatchBrowserEvent('refresh');
     }
@@ -56,6 +68,10 @@ class LeadFollowUpsDetail extends Component
         $this->editing = true;
         $this->modalTitle = trans('crud.lead_follow_ups.edit_title');
         $this->followUp = $followUp;
+
+        $this->followUpNextFollowDate = $this->followUp->next_follow_date->format(
+            'Y-m-d'
+        );
 
         $this->dispatchBrowserEvent('refresh');
 
@@ -84,6 +100,10 @@ class LeadFollowUpsDetail extends Component
         } else {
             $this->authorize('update', $this->followUp);
         }
+
+        $this->followUp->next_follow_date = \Carbon\Carbon::parse(
+            $this->followUpNextFollowDate
+        );
 
         $this->followUp->save();
 

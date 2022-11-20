@@ -6,18 +6,22 @@ use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
 use App\Models\UserTrainer;
+use Illuminate\Support\Str;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Resources\{Form, Table};
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\ReplicateAction;
 use Filament\Forms\Components\BelongsToSelect;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -53,7 +57,7 @@ class AssigmentAnswersRelationManager extends RelationManager
                 'default' => 12,
                 'md' => 12,
                 'lg' => 12,
-            ]);
+            ])->enableDownload();
 
         $userId = Select::make('user_id')
             ->label('Student')
@@ -116,7 +120,6 @@ class AssigmentAnswersRelationManager extends RelationManager
             $status->hiddenOn(['create', 'edit']);
             $reason->hiddenOn(['create', 'edit']);
         } else if (auth()->user()->type === 'instructor') {
-            $file->hiddenOn(['edit']);
             $userId->hiddenOn(['edit']);
         }
 
@@ -125,6 +128,7 @@ class AssigmentAnswersRelationManager extends RelationManager
             $userId,
             $points,
             $status,
+            $file,
             $reason,
         ];
     }
@@ -198,14 +202,28 @@ class AssigmentAnswersRelationManager extends RelationManager
                     'assigment',
                     'title'
                 ),
-
-                SelectFilter::make('instructor')->relationship(
-                    'instructor',
-                    'name'
-                ),
             ])->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('download')
+                    ->action(function ($record) {
+                        if ($record->file) {
+                            return Storage::download($record->file);
+                        }
+                    })
+                    ->label(function ($record) {
+                        return $record->file ? 'Download':'Waiting...';
+                    })
+                    ->tooltip(__('Download the file'))
+                    ->icon(function ($record) {
+                        return $record->file ? 'heroicon-s-download':'heroicon-s-x';
+                    })
+                    ->color(function ($record) {
+                        return $record->file ? 'success':'info';
+                    })
+                    ->disabled(function ($record) {
+                        return $record->file ? false:true;
+                    }),
             ])->headerActions([
                 Tables\Actions\CreateAction::make(),
             ]);

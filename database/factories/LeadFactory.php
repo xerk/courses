@@ -27,10 +27,11 @@ class LeadFactory extends Factory
             'email' => $this->faker->email,
             'phone' => $this->faker->phoneNumber,
             'course_type' => $this->faker->text(255),
-            'category_approved' => $this->faker->text(255),
             'lead_from' => 'website',
             'note' => $this->faker->text,
             'category_id' => \App\Models\Category::factory(),
+            'sub_category_id' => \App\Models\SubCategory::factory(),
+            'sales_id' => \App\Models\User::factory(),
         ];
     }
 }

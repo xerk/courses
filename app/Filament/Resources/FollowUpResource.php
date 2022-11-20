@@ -4,16 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Models\FollowUp;
 use Filament\{Tables, Forms};
-use Filament\Resources\{Form, Table, Resource};
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Filters\SelectFilter;
-use App\Filament\Resources\FollowUpResource\Pages;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\{Form, Table, Resource};
+use App\Filament\Resources\FollowUpResource\Pages;
 
 class FollowUpResource extends Resource
 {
@@ -37,7 +38,8 @@ class FollowUpResource extends Resource
         ]);
     }
 
-    public static function getLeadRelation() {
+    public static function getLeadRelation()
+    {
         return Select::make('lead_id')
             ->rules(['required', 'exists:leads,id'])
             ->relationship('lead', 'name')
@@ -57,7 +59,7 @@ class FollowUpResource extends Resource
         if ($relation) {
             $schema[] = static::getLeadRelation();
         }
-        
+
         $relation ? $md = 4 : $md = 6;
 
         $schema = array_merge($schema, [
@@ -69,6 +71,24 @@ class FollowUpResource extends Resource
                     'md' => $md,
                 ]),
 
+            Select::make('follow_up_from')
+                ->rules([
+                    'nullable',
+                    'in:email,call,visit',
+                ])
+                ->searchable()
+                ->options([
+                    'email' => 'Email',
+                    'call' => 'Call',
+                    'visit' => 'By visit',
+                ])
+                ->placeholder('Follow up from')
+                ->columnSpan([
+                    'default' => 12,
+                    'md' => 6,
+                    'lg' => 6,
+                ]),
+
             TextInput::make('status')
                 ->rules(['nullable', 'max:255', 'string'])
                 ->placeholder('Status')
@@ -77,16 +97,31 @@ class FollowUpResource extends Resource
                     'md' => $md,
                 ]),
 
+            DatePicker::make('follow_date')
+                ->rules(['required', 'date'])
+                ->placeholder('Follow up date')
+                ->columnSpan([
+                    'default' => 12,
+                    'md' => 6,
+                    'lg' => 6,
+                ]),
+
+            DatePicker::make('next_follow_date')
+                ->rules(['nullable', 'date'])
+                ->placeholder('Next Follow up date')
+                ->columnSpan([
+                    'default' => 12,
+                    'md' => 6,
+                    'lg' => 6,
+                ]),
+
             RichEditor::make('Note')
                 ->rules(['nullable', 'max:255', 'string'])
                 ->placeholder('Note')
                 ->columnSpan([
                     'default' => 12,
                 ]),
-
-            ]);
-
-
+        ]);
 
         return Grid::make(['default' => 12])->schema($schema);
     }
@@ -110,7 +145,7 @@ class FollowUpResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -121,7 +156,7 @@ class FollowUpResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

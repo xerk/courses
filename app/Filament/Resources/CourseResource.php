@@ -6,6 +6,7 @@ use App\Models\Course;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,8 +37,8 @@ class CourseResource extends Resource
                         ->placeholder('Category')
                         ->columnSpan([
                             'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
+                            'md' => 6,
+                            'lg' => 6,
                         ]),
 
                     TextInput::make('title')
@@ -45,8 +46,25 @@ class CourseResource extends Resource
                         ->placeholder('Title')
                         ->columnSpan([
                             'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
+
+                    Select::make('type')
+                        ->rules([
+                            'nullable',
+                            'in:exam,course',
+                        ])
+                        ->searchable()
+                        ->options([
+                            'exam' => 'Exam',
+                            'course' => 'Course',
+                        ])
+                        ->placeholder('Select course type')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
                         ]),
 
                     TextInput::make('cost')
@@ -54,8 +72,8 @@ class CourseResource extends Resource
                         ->placeholder('Cost')
                         ->columnSpan([
                             'default' => 12,
-                            'md' => 12,
-                            'lg' => 12,
+                            'md' => 6,
+                            'lg' => 6,
                         ]),
 
                     SpatieMediaLibraryFileUpload::make('documents')

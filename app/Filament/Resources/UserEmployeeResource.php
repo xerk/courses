@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
 use App\Models\UserEmployee;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Section;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\EmployeeResource;
@@ -26,12 +28,12 @@ class UserEmployeeResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-  
+
 
     public static function form(Form $form): Form
     {
         return $form->schema([
-            UserAdminResource::getUserForm('employee', true),
+            UserAdminResource::getUserForm('employee'),
             UserAdminResource::getUserRoleForm(),
 
             Section::make('Employee Data')->relationship('employee')->schema([
@@ -111,4 +113,6 @@ class UserEmployeeResource extends Resource
             'edit' => Pages\EditUserEmployee::route('/{record}/edit'),
         ];
     }
+
+    
 }

@@ -16,8 +16,9 @@ class Lead extends Model
         'email',
         'phone',
         'course_type',
-        'category_approved',
         'category_id',
+        'sub_category_id',
+        'sales_id',
         'lead_from',
         'note',
     ];
@@ -32,6 +33,16 @@ class Lead extends Model
     public function followUps()
     {
         return $this->hasMany(FollowUp::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function sales()
+    {
+        return $this->belongsTo(UserSaller::class, 'sales_id');
     }
 
     public function documents()

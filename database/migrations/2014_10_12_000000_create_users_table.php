@@ -27,7 +27,16 @@ return new class extends Migration {
             $table->string('phone2')->nullable();
             $table->string('address')->nullable();
             $table->string('inside_address')->nullable();
-            $table->enum('type', ['trainer', 'employee', 'admin'])->nullable();
+            $table
+                ->enum('type', [
+                    'trainer',
+                    'employee',
+                    'admin',
+                    'instructor',
+                    'sales',
+                    'accountant',
+                ])
+                ->nullable();
             $table->foreignId('category_id')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();

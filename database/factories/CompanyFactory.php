@@ -28,6 +28,8 @@ class CompanyFactory extends Factory
             'email' => $this->faker->email,
             'address' => $this->faker->address,
             'joining_date' => $this->faker->date,
+            'start_date' => $this->faker->date,
+            'end_date' => $this->faker->date,
         ];
     }
 }

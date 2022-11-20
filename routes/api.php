@@ -9,11 +9,13 @@ use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FollowUpController;
+use App\Http\Controllers\Api\UserLeadsController;
 use App\Http\Controllers\Api\AssigmentController;
 use App\Http\Controllers\Api\UserCoursesController;
 use App\Http\Controllers\Api\CourseUsersController;
 use App\Http\Controllers\Api\CompanyLeadController;
 use App\Http\Controllers\Api\CourseGroupController;
+use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\CompanyUsersController;
 use App\Http\Controllers\Api\CategoryUsersController;
 use App\Http\Controllers\Api\CategoryLeadsController;
@@ -25,12 +27,16 @@ use App\Http\Controllers\Api\CompanyTrainersController;
 use App\Http\Controllers\Api\CourseCompaniesController;
 use App\Http\Controllers\Api\AssigmentAnswerController;
 use App\Http\Controllers\Api\UserCourseGroupsController;
+use App\Http\Controllers\Api\UserCompanyLeadsController;
 use App\Http\Controllers\Api\CourseGroupUsersController;
+use App\Http\Controllers\Api\SubCategoryLeadsController;
 use App\Http\Controllers\Api\CourseCourseGroupsController;
 use App\Http\Controllers\Api\UserAssigmentAnswersController;
 use App\Http\Controllers\Api\CategoryCompanyLeadsController;
 use App\Http\Controllers\Api\CompanyLeadFollowUpsController;
+use App\Http\Controllers\Api\CategorySubCategoriesController;
 use App\Http\Controllers\Api\CourseGroupAssigmentsController;
+use App\Http\Controllers\Api\SubCategoryCompanyLeadsController;
 use App\Http\Controllers\Api\AssigmentAssigmentAnswersController;
 
 /*
@@ -87,15 +93,25 @@ Route::name('api.')
             'store',
         ])->name('users.assigment-answers.store');
 
-        // User Assigment Answers2
-        Route::get('/users/{user}/assigment-answers', [
-            UserAssigmentAnswersController::class,
+        // User Leads
+        Route::get('/users/{user}/leads', [
+            UserLeadsController::class,
             'index',
-        ])->name('users.assigment-answers.index');
-        Route::post('/users/{user}/assigment-answers', [
-            UserAssigmentAnswersController::class,
+        ])->name('users.leads.index');
+        Route::post('/users/{user}/leads', [
+            UserLeadsController::class,
             'store',
-        ])->name('users.assigment-answers.store');
+        ])->name('users.leads.store');
+
+        // User Company Leads
+        Route::get('/users/{user}/company-leads', [
+            UserCompanyLeadsController::class,
+            'index',
+        ])->name('users.company-leads.index');
+        Route::post('/users/{user}/company-leads', [
+            UserCompanyLeadsController::class,
+            'store',
+        ])->name('users.company-leads.store');
 
         // User Courses
         Route::get('/users/{user}/courses', [
@@ -166,6 +182,16 @@ Route::name('api.')
             CategoryCompanyLeadsController::class,
             'store',
         ])->name('categories.company-leads.store');
+
+        // Category Sub Categories
+        Route::get('/categories/{category}/sub-categories', [
+            CategorySubCategoriesController::class,
+            'index',
+        ])->name('categories.sub-categories.index');
+        Route::post('/categories/{category}/sub-categories', [
+            CategorySubCategoriesController::class,
+            'store',
+        ])->name('categories.sub-categories.store');
 
         Route::apiResource('companies', CompanyController::class);
 
@@ -309,4 +335,26 @@ Route::name('api.')
             'assigment-answers',
             AssigmentAnswerController::class
         );
+
+        Route::apiResource('sub-categories', SubCategoryController::class);
+
+        // SubCategory Leads
+        Route::get('/sub-categories/{subCategory}/leads', [
+            SubCategoryLeadsController::class,
+            'index',
+        ])->name('sub-categories.leads.index');
+        Route::post('/sub-categories/{subCategory}/leads', [
+            SubCategoryLeadsController::class,
+            'store',
+        ])->name('sub-categories.leads.store');
+
+        // SubCategory Company Leads
+        Route::get('/sub-categories/{subCategory}/company-leads', [
+            SubCategoryCompanyLeadsController::class,
+            'index',
+        ])->name('sub-categories.company-leads.index');
+        Route::post('/sub-categories/{subCategory}/company-leads', [
+            SubCategoryCompanyLeadsController::class,
+            'store',
+        ])->name('sub-categories.company-leads.store');
     });

@@ -214,11 +214,6 @@ class AssigmentAnswerResource extends Resource
                     'assigment',
                     'title'
                 ),
-
-                SelectFilter::make('instructor_id')->relationship(
-                    'instructor',
-                    'name'
-                ),
             ]);
     }
 

@@ -14,7 +14,7 @@ class Company extends Model implements HasMedia
     use Searchable;
     use InteractsWithMedia;
 
-    protected $fillable = ['name', 'phone', 'email', 'address', 'joining_date'];
+    protected $fillable = ['name', 'phone', 'email', 'address', 'joining_date', 'start_date', 'end_date'];
 
     protected $searchableFields = ['*'];
 

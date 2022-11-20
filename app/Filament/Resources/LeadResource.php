@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Models\Lead;
+use App\Models\Category;
+use App\Models\SubCategory;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
@@ -20,7 +22,7 @@ class LeadResource extends Resource
 {
     protected static ?string $model = Lead::class;
 
-    protected static ?string $navigationGroup = 'Main';
+    protected static ?string $navigationGroup = 'Sales Protal';
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -28,86 +30,126 @@ class LeadResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $followUps = Repeater::make('FollowUps')
+            ->relationship('followUps')
+            ->label('Customer Follow-ups')
+            ->schema([
+                FollowUpResource::getFollowUpForm()
+            ])->columnSpan('full');
+
+        if (auth()->user()->type == 'sales') {
+            $followUps->disableItemDeletion();
+            $followUps->disableItemMovement();
+        }
         return $form->schema([
             static::getLeadForm(),
-            
-            Repeater::make('FollowUps')
-                ->relationship('followUps')
-                ->schema([
-                    FollowUpResource::getFollowUpForm()
-                ])->columnSpan('full'),
+
+            $followUps
         ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = static::getModel()::query();
+        if (auth()->user()->type === 'sales') {
+            $query->where('sales_id', auth()->user()->id);
+        }
+
+        return $query;
     }
 
     public static function getLeadForm()
     {
         return Section::make('Lead Infomration')->schema([
             Grid::make(['default' => 12])->schema([
+                Select::make('sales_id')
+                    ->rules(['required'])
+                    ->relationship('sales', 'name')
+                    ->preload()
+                    ->searchable()
+                    ->placeholder('Select Sales')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
                 TextInput::make('name')
-                        ->rules(['required', 'max:255', 'string'])
-                        ->placeholder('Name')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                    ->rules(['required', 'max:255', 'string'])
+                    ->placeholder('Name')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
 
-                    TextInput::make('email')
-                        ->rules(['nullable', 'email'])
-                        ->email()
-                        ->placeholder('Email')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                TextInput::make('email')
+                    ->rules(['nullable', 'email'])
+                    ->email()
+                    ->placeholder('Email')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
 
-                    TextInput::make('phone')
-                        ->rules(['nullable', 'max:255', 'string'])
-                        ->placeholder('Phone')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                TextInput::make('phone')
+                    ->rules(['nullable', 'max:255', 'string'])
+                    ->placeholder('Phone')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
 
-                    TextInput::make('category_approved')
-                        ->rules(['nullable', 'max:255', 'string'])
-                        ->placeholder('Category Approved')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                Select::make('category_id')
+                    ->rules(['required'])
+                    ->options(Category::all()->pluck('name', 'id')->toArray())
+                    ->searchable()
+                    ->placeholder('Category')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ])
+                    ->reactive()
+                    ->afterStateUpdated(fn (callable $set) => $set('sub_category_id', null)),
 
-                    Select::make('category_id')
-                        ->rules(['required', 'exists:categories,id'])
-                        ->relationship('category', 'name')
-                        ->placeholder('Category')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                Select::make('sub_category_id')
+                    ->rules(['required'])
+                    ->options(function (callable $get) {
+                        $category = Category::find($get('category_id'));
+                        if (!$category) {
+                            return SubCategory::all()->pluck('name', 'id');
+                        }
 
-                    Select::make('lead_from')
-                        ->rules([
-                            'nullable',
-                            'in:website,calls,whatsapp,by_visit',
-                        ])
-                        ->searchable()
-                        ->options([
-                            'website' => 'Website',
-                            'calls' => 'Calls',
-                            'whatsapp' => 'Whatsapp',
-                            'by_visit' => 'By visit',
-                        ])
-                        ->placeholder('Lead From')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                        return $category->subCategories->pluck('name', 'id');
+                    })
+                    ->searchable()
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
+                Select::make('lead_from')
+                    ->rules([
+                        'nullable',
+                        'in:website,calls,whatsapp,by_visit',
+                    ])
+                    ->searchable()
+                    ->options([
+                        'website' => 'Website',
+                        'calls' => 'Calls',
+                        'whatsapp' => 'Whatsapp',
+                        'by_visit' => 'By visit',
+                    ])
+                    ->placeholder('Lead From')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
             ])
         ]);
     }
@@ -138,7 +180,7 @@ class LeadResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(
@@ -149,7 +191,7 @@ class LeadResource extends Resource
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(
+                                fn (
                                     Builder $query,
                                     $date
                                 ): Builder => $query->whereDate(

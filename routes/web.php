@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\CompanyLeadController;
 use App\Http\Controllers\CourseGroupController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\AssigmentAnswerController;
 
 /*
@@ -39,4 +40,6 @@ Route::prefix('/')
         Route::resource('course-groups', CourseGroupController::class);
         Route::resource('assigments', AssigmentController::class);
         Route::resource('assigment-answers', AssigmentAnswerController::class);
+        Route::resource('sub-categories', SubCategoryController::class);
     });
+Route::get('download-assigment/{id}', [UserController::class, 'downloadAssigment'])->name('download.assigment');

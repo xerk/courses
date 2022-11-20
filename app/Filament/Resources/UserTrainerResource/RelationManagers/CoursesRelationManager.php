@@ -244,13 +244,6 @@ class CoursesRelationManager extends RelationManager
                                     'lg' => 4,
                                 ]),
 
-                            Toggle::make('cleared_fees')
-                                ->columnSpan([
-                                    'default' => 12,
-                                    'md' => 6,
-                                    'lg' => 4,
-                                ]),
-
 
                             Toggle::make('receipt_certificate')
                                 ->columnSpan([

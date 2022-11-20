@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->string('email');
             $table->string('address')->nullable();
             $table->date('joining_date')->nullable();
+            $table->date('start_date');
+            $table->date('end_date');
 
             $table->timestamps();
         });

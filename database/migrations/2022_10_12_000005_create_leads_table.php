@@ -18,8 +18,9 @@ return new class extends Migration {
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('course_type')->nullable();
-            $table->string('category_approved')->nullable();
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
+            $table->unsignedBigInteger('sales_id')->nullable();
             $table
                 ->enum('lead_from', [
                     'website',

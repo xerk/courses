@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('company')->nullable();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->string('occupation')->nullable();
             $table->string('work_place')->nullable();
             $table->tinyInteger('sufer_diseases')->nullable();

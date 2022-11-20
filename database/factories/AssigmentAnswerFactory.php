@@ -25,9 +25,9 @@ class AssigmentAnswerFactory extends Factory
         return [
             'status' => 'approved',
             'reason' => $this->faker->text,
+            'points' => $this->faker->randomNumber(0),
             'assigment_id' => \App\Models\Assigment::factory(),
             'user_id' => \App\Models\User::factory(),
-            'instructor_id' => \App\Models\User::factory(),
         ];
     }
 }

@@ -20,11 +20,9 @@ return new class extends Migration {
             $table->string('business_email')->nullable();
             $table->string('phone')->nullable();
             $table->string('business_landline')->nullable();
-            $table->string('complete_with');
-            $table->unsignedBigInteger('category_id');
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
-            $table->string('category_approved')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
+            $table->unsignedBigInteger('sales_id')->nullable();
             $table->string('status')->nullable();
             $table->text('note')->nullable();
 

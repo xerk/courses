@@ -24,8 +24,11 @@ class FollowUpFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(10),
+            'follow_date' => $this->faker->date,
+            'next_follow_date' => $this->faker->date,
             'Note' => $this->faker->text,
             'status' => $this->faker->word,
+            'follow_up_from' => 'visit',
             'lead_id' => \App\Models\Lead::factory(),
             'company_lead_id' => \App\Models\CompanyLead::factory(),
         ];

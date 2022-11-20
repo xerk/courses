@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->date('ending_date')->nullable();
             $table->date('joining_date')->nullable();
             $table->mediumText('note')->nullable();
-            $table->tinyInteger('cleared_fees')->nullable();
             $table->tinyInteger('receipt_certificate')->nullable();
             $table->string('duration_days')->nullable();
             $table->enum('training_method', ['online', 'offline'])->nullable();

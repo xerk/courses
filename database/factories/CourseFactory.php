@@ -25,6 +25,7 @@ class CourseFactory extends Factory
         return [
             'title' => $this->faker->sentence(10),
             'cost' => $this->faker->text(255),
+            'type' => 'exam',
             'category_id' => \App\Models\Category::factory(),
         ];
     }

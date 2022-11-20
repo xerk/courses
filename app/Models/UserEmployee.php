@@ -7,5 +7,4 @@ use Parental\HasParent;
 class UserEmployee extends User
 {
     use HasParent;
-
 }

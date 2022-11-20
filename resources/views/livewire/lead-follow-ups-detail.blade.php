@@ -52,6 +52,49 @@
                             placeholder="Status"
                         ></x-inputs.text>
                     </x-inputs.group>
+
+                    <x-inputs.group class="w-full">
+                        <x-inputs.select
+                            name="followUp.company_lead_id"
+                            label="Company Lead"
+                            wire:model="followUp.company_lead_id"
+                        >
+                            <option value="null" disabled>Please select the Company Lead</option>
+                            @foreach($companyLeadsForSelect as $value => $label)
+                            <option value="{{ $value }}"  >{{ $label }}</option>
+                            @endforeach
+                        </x-inputs.select>
+                    </x-inputs.group>
+
+                    <x-inputs.group class="w-full">
+                        <x-inputs.select
+                            name="followUp.follow_up_from"
+                            label="Follow Up From"
+                            wire:model="followUp.follow_up_from"
+                        >
+                            <option value="visit" {{ $selected == 'visit' ? 'selected' : '' }} >Visit</option>
+                            <option value="email" {{ $selected == 'email' ? 'selected' : '' }} >Email</option>
+                            <option value="call" {{ $selected == 'call' ? 'selected' : '' }} >Call</option>
+                        </x-inputs.select>
+                    </x-inputs.group>
+
+                    <x-inputs.group class="w-full">
+                        <x-inputs.textarea
+                            name="followUp.follow_date"
+                            label="Follow Date"
+                            wire:model="followUp.follow_date"
+                            maxlength="255"
+                        ></x-inputs.textarea>
+                    </x-inputs.group>
+
+                    <x-inputs.group class="w-full">
+                        <x-inputs.date
+                            name="followUpNextFollowDate"
+                            label="Next Follow Date"
+                            wire:model="followUpNextFollowDate"
+                            max="255"
+                        ></x-inputs.date>
+                    </x-inputs.group>
                 </div>
             </div>
         </div>
@@ -98,6 +141,18 @@
                     <th class="px-4 py-3 text-left">
                         @lang('crud.lead_follow_ups.inputs.status')
                     </th>
+                    <th class="px-4 py-3 text-left">
+                        @lang('crud.lead_follow_ups.inputs.company_lead_id')
+                    </th>
+                    <th class="px-4 py-3 text-left">
+                        @lang('crud.lead_follow_ups.inputs.follow_up_from')
+                    </th>
+                    <th class="px-4 py-3 text-left">
+                        @lang('crud.lead_follow_ups.inputs.follow_date')
+                    </th>
+                    <th class="px-4 py-3 text-left">
+                        @lang('crud.lead_follow_ups.inputs.next_follow_date')
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -119,6 +174,18 @@
                     </td>
                     <td class="px-4 py-3 text-left">
                         {{ $followUp->status ?? '-' }}
+                    </td>
+                    <td class="px-4 py-3 text-left">
+                        {{ optional($followUp->companyLead)->name ?? '-' }}
+                    </td>
+                    <td class="px-4 py-3 text-left">
+                        {{ $followUp->follow_up_from ?? '-' }}
+                    </td>
+                    <td class="px-4 py-3 text-left">
+                        {{ $followUp->follow_date ?? '-' }}
+                    </td>
+                    <td class="px-4 py-3 text-left">
+                        {{ $followUp->next_follow_date ?? '-' }}
                     </td>
                     <td class="px-4 py-3 text-right" style="width: 134px;">
                         <div
@@ -142,7 +209,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">
+                    <td colspan="8">
                         <div class="mt-10 px-4">{{ $followUps->render() }}</div>
                     </td>
                 </tr>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\AssigmentAnswer;
 
 class UserController extends Controller
 {
@@ -164,5 +165,17 @@ class UserController extends Controller
         return redirect()
             ->route('users.index')
             ->withSuccess(__('crud.common.removed'));
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadAssigment($id)
+    {
+
+        $download = AssigmentAnswer::find($id);
+        return Storage::disk('public')->download($download->file);
     }
 }

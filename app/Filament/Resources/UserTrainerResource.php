@@ -18,6 +18,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Resources\{Form, Table, Resource};
+use Z3d0X\FilamentLogger\Resources\ActivityResource;
 use App\Filament\Resources\UserTrainerResource\Pages;
 
 class UserTrainerResource extends Resource

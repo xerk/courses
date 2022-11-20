@@ -63,6 +63,11 @@
                         Assigment Answers
                         </x-dropdown-link>
                         @endcan
+                        @can('view-any', App\Models\SubCategory::class)
+                        <x-dropdown-link href="{{ route('sub-categories.index') }}">
+                        Sub Categories
+                        </x-dropdown-link>
+                        @endcan
                 </x-nav-dropdown>
 
             </div>
@@ -159,6 +164,11 @@
                 @can('view-any', App\Models\AssigmentAnswer::class)
                 <x-responsive-nav-link href="{{ route('assigment-answers.index') }}">
                 Assigment Answers
+                </x-responsive-nav-link>
+                @endcan
+                @can('view-any', App\Models\SubCategory::class)
+                <x-responsive-nav-link href="{{ route('sub-categories.index') }}">
+                Sub Categories
                 </x-responsive-nav-link>
                 @endcan
 

@@ -16,7 +16,8 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
             $table->string('title');
-            $table->string('cost');
+            $table->string('cost')->nullable();
+            $table->enum('type', ['exam', 'course'])->nullable();
 
             $table->timestamps();
         });

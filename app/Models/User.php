@@ -10,6 +10,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,12 +26,15 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     use HasApiTokens;
     use HasRoles; //or HasFilamentShield
     use InteractsWithMedia;
+    use LogsActivity;
 
     protected $childTypes = [
+        'sales' => UserSaller::class,
         'instructor' => UserInstructor::class,
         'employee' => UserEmployee::class,
         'trainer' => UserTrainer::class,
         'admin' => UserAdmin::class,
+        'accountant' => UserAccountant::class,
     ];
 
     protected $fillable = [
@@ -61,11 +65,11 @@ class User extends Authenticatable implements HasMedia, HasAvatar
         'email_verified_at' => 'datetime',
     ];
 
-    // public function getActivitylogOptions(): LogOptions
-    // {
-    //     return LogOptions::defaults()
-    //         ->logOnly($this->fillable);
-    // }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly($this->fillable);
+    }
 
     public function trainer()
     {

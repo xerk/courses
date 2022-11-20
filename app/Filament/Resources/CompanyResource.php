@@ -74,6 +74,24 @@ class CompanyResource extends Resource
                             'lg' => 12,
                         ]),
 
+                    DatePicker::make('start_date')
+                        ->rules(['required', 'date'])
+                        ->placeholder('Starting Date')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
+
+                    DatePicker::make('end_date')
+                        ->rules(['required', 'date'])
+                        ->placeholder('Ending Date')
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 6,
+                            'lg' => 6,
+                        ]),
+
                     SpatieMediaLibraryFileUpload::make('Contract')
                         ->enableReordering()
                         ->columnSpan([
