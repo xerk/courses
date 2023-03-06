@@ -46,6 +46,7 @@ class TrainerResource extends Resource
         return Select::make('user_id')
             ->rules(['required', 'exists:users,id'])
             ->relationship('user', 'name')
+            ->preload()
             ->searchable()
             ->placeholder('User')
             ->columnSpan([
@@ -64,6 +65,15 @@ class TrainerResource extends Resource
         }
 
         $schema = array_merge($schema, [
+            TextInput::make('student_code')
+                ->rules(['required', 'max:255', 'string'])
+                ->placeholder('Student Code')
+                ->columnSpan([
+                    'default' => 12,
+                    'md' => 6,
+                    'lg' => 6,
+                ]),
+
             TextInput::make('occupation')
                 ->rules(['nullable', 'max:255', 'string'])
                 ->placeholder('Occupation')
@@ -76,14 +86,6 @@ class TrainerResource extends Resource
             TextInput::make('work_place')
                 ->rules(['nullable', 'max:255', 'string'])
                 ->placeholder('Work Place')
-                ->columnSpan([
-                    'default' => 12,
-                    'md' => 6,
-                    'lg' => 6,
-                ]),
-
-            Toggle::make('sufer_diseases')
-                ->rules(['nullable', 'max:255'])
                 ->columnSpan([
                     'default' => 12,
                     'md' => 6,
@@ -110,6 +112,7 @@ class TrainerResource extends Resource
             Select::make('company_id')
                 ->rules(['required', 'exists:companies,id'])
                 ->relationship('company', 'name')
+                ->preload()
                 ->searchable()
                 ->placeholder('Company')
                 ->columnSpan([
@@ -118,14 +121,24 @@ class TrainerResource extends Resource
                     'lg' => 6,
                 ])->hidden(fn (Closure $get) => $get('company') !== true),
 
+            Toggle::make('sufer_diseases')
+                ->label('Health Status')
+                ->rules(['nullable', 'max:255'])
+                ->columnSpan([
+                    'default' => 12,
+                    'md' => 6,
+                    'lg' => 6,
+                ])->reactive(),
+
             RichEditor::make('diseases_note')
+                ->label('Health Note')
                 ->rules(['nullable', 'max:255', 'string'])
                 ->placeholder('Diseases Note')
                 ->columnSpan([
                     'default' => 12,
                     'md' => 12,
                     'lg' => 12,
-                ]),
+                ])->hidden(fn (Closure $get) => $get('sufer_diseases') !== true),
 
 
             RichEditor::make('note')
@@ -150,7 +163,7 @@ class TrainerResource extends Resource
                 Tables\Columns\TextColumn::make('company.name')->limit(50),
                 Tables\Columns\TextColumn::make('occupation')->limit(50),
                 Tables\Columns\TextColumn::make('work_place')->limit(50),
-                Tables\Columns\TextColumn::make('sufer_diseases')->limit(50),
+                Tables\Columns\TextColumn::make('sufer_diseases')->label('Health Status')->limit(50),
                 Tables\Columns\TextColumn::make('diseases_note')->limit(50),
                 Tables\Columns\TextColumn::make('job_title')->limit(50),
                 Tables\Columns\TextColumn::make('note')->limit(50),

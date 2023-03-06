@@ -100,7 +100,7 @@ class AssigmentsRelationManager extends HasManyRelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->label('Instructor')->limit(50),
                 Tables\Columns\TextColumn::make('courseGroup.name')->limit(50),
                 Tables\Columns\TextColumn::make('title')->limit(50),
                 Tables\Columns\TextColumn::make('dead_line')->date()->color(function (TextColumn $column) {

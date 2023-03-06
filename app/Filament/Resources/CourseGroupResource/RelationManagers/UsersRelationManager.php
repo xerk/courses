@@ -31,7 +31,7 @@ class UsersRelationManager extends RelationManager
     public static function enableAttchment()
     {
         if (auth()->user()->type === 'employee' || auth()->user()->type === 'admin') {
-            return [AttachAction::make()->label('Assign Student')->recordSelect(function (Select $select) {
+            return [AttachAction::make()->preloadRecordSelect()->label('Assign Student')->recordSelect(function (Select $select) {
                 return $select->multiple();
             })->recordSelectOptionsQuery(fn (Builder $query) => $query->where('type', '=', 'trainer'))];
         }

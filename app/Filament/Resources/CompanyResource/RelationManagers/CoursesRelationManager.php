@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CompanyResource\RelationManagers;
 
+use Closure;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Components\Grid;
@@ -31,6 +32,7 @@ class CoursesRelationManager extends BelongsToManyRelationManager
                 Select::make('category_id')
                     ->rules(['required', 'exists:categories,id'])
                     ->relationship('category', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('Category')
                     ->columnSpan([
@@ -107,7 +109,7 @@ class CoursesRelationManager extends BelongsToManyRelationManager
                 )->multiple(),
             ])
             ->headerActions([
-                AttachAction::make()
+                AttachAction::make()->preloadRecordSelect()
                     ->form(fn (AttachAction $action): array => [
                         Grid::make(['default' => 12])->schema([
                             $action->getRecordSelect()->placeholder('Select course')->preload()
@@ -160,6 +162,7 @@ class CoursesRelationManager extends BelongsToManyRelationManager
 
                             TextInput::make('training_vinue')->maxLength(255)
                                 ->rules(['required'])
+                                ->label('Training Venue')
                                 ->columnSpan([
                                     'default' => 12,
                                     'md' => 6,
@@ -260,7 +263,17 @@ class CoursesRelationManager extends BelongsToManyRelationManager
                                     'default' => 12,
                                     'md' => 6,
                                     'lg' => 4,
-                                ]),
+                                ])->reactive(),
+
+                                DatePicker::make('certificate_date')
+                                ->rules(['nullable', 'date'])
+                                ->label('Date of Issue')
+                                ->placeholder('Ending Date')
+                                ->columnSpan([
+                                    'default' => 12,
+                                    'md' => 6,
+                                    'lg' => 4,
+                                ])->hidden(fn (Closure $get) => $get('receipt_certificate') !== true),
 
                             RichEditor::make('note')
                                 ->columnSpan([

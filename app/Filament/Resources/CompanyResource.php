@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use App\Models\Company;
 use Filament\{Tables, Forms};
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
@@ -94,6 +96,7 @@ class CompanyResource extends Resource
 
                     SpatieMediaLibraryFileUpload::make('Contract')
                         ->enableReordering()
+                        ->enableDownload()
                         ->columnSpan([
                             'default' => 12,
                             'md' => 12,
@@ -109,6 +112,19 @@ class CompanyResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->limit(50),
+                Tables\Columns\TextColumn::make('end_date')->date()->color(function (TextColumn $column) {
+                    $date = new Carbon($column->getState());
+                    $now = Carbon::now()->format('Y-m-d');
+                    if ($date->format('Y-m-d') < $now) {
+                        return 'danger';
+                    }
+                    if ($date->subMonths(3)->format('Y-m-d') > $now) {
+                        return 'success';
+                    }
+                    if (new Carbon($column->getState()) > $now) {
+                        return 'warning';
+                    }
+                }),
                 Tables\Columns\TextColumn::make('phone')->limit(50),
                 Tables\Columns\TextColumn::make('email')->limit(50),
                 Tables\Columns\TextColumn::make('address')->limit(50),

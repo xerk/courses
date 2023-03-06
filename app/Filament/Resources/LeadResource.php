@@ -169,6 +169,8 @@ class LeadResource extends Resource
                     'whatsapp' => 'Whatsapp',
                     'by_visit' => 'By visit',
                 ]),
+                Tables\Columns\TextColumn::make('created_at')->date(),
+
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')

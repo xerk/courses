@@ -25,7 +25,8 @@ use App\Http\Controllers\AssigmentAnswerController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // Login / admin
+    return redirect('/admin/login');
 });
 
 Route::prefix('/')

@@ -24,7 +24,7 @@ class CourseGroupResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationGroup = 'Main';
+    protected static ?string $navigationGroup = 'Education Portal';
 
     public static function getEloquentQuery(): Builder
     {
@@ -59,6 +59,7 @@ class CourseGroupResource extends Resource
                         ->rules(['required', 'exists:courses,id'])
                         ->relationship('course', 'title')
                         ->searchable()
+                        ->preload()
                         ->placeholder('Course')
                         ->columnSpan([
                             'default' => 12,
@@ -83,7 +84,7 @@ class CourseGroupResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->label('Instructor')->limit(50),
                 Tables\Columns\TextColumn::make('course.title')->limit(50),
                 Tables\Columns\TextColumn::make('name')->limit(50),
             ])

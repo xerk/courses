@@ -189,6 +189,7 @@ class UserAdminResource extends Resource
                 Select::make('category_id')
                     ->rules(['nullable', 'exists:categories,id'])
                     ->relationship('category', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('Category')
                     ->columnSpan([
@@ -218,6 +219,7 @@ class UserAdminResource extends Resource
                 Select::make('company_id')
                     ->rules(['nullable', 'exists:companies,id'])
                     ->relationship('company', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('Company')
                     ->columnSpan([
@@ -229,6 +231,7 @@ class UserAdminResource extends Resource
 
                 SpatieMediaLibraryFileUpload::make('documents')
                     ->multiple()
+                    ->enableDownload()
                     ->enableReordering()
                     ->columnSpan([
                         'default' => 12,

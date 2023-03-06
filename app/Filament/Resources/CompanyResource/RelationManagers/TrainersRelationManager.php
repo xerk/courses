@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources\CompanyResource\RelationManagers;
 
+use Closure;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Resources\{Form, Table};
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Resources\{Form, Table};
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\BelongsToSelect;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Resources\RelationManagers\HasManyRelationManager;
 
 class TrainersRelationManager extends HasManyRelationManager
@@ -26,9 +27,10 @@ class TrainersRelationManager extends HasManyRelationManager
     {
         return $form->schema([
             Grid::make(['default' => 12])->schema([
-                BelongsToSelect::make('user_id')
+                Select::make('user_id')
                     ->rules(['required', 'exists:users,id'])
                     ->relationship('user', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('User')
                     ->columnSpan([
@@ -66,21 +68,23 @@ class TrainersRelationManager extends HasManyRelationManager
 
                 TextInput::make('sufer_diseases')
                     ->rules(['nullable', 'max:255'])
+                    ->label('Health Status')
                     ->placeholder('Sufer Diseases')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
                         'lg' => 12,
-                    ]),
+                    ])->reactive(),
 
                 RichEditor::make('diseases_note')
                     ->rules(['nullable', 'max:255', 'string'])
+                    ->label('Health Note')
                     ->placeholder('Diseases Note')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
                         'lg' => 12,
-                    ]),
+                    ])->hidden(fn (Closure $get) => $get('sufer_diseases') !== true),
 
                 TextInput::make('job_title')
                     ->rules(['nullable', 'max:255', 'string'])
@@ -112,7 +116,7 @@ class TrainersRelationManager extends HasManyRelationManager
                 Tables\Columns\TextColumn::make('company.name')->limit(50),
                 Tables\Columns\TextColumn::make('occupation')->limit(50),
                 Tables\Columns\TextColumn::make('work_place')->limit(50),
-                Tables\Columns\TextColumn::make('sufer_diseases')->limit(50),
+                Tables\Columns\TextColumn::make('sufer_diseases')->label('Health Status')->limit(50),
                 Tables\Columns\TextColumn::make('diseases_note')->limit(50),
                 Tables\Columns\TextColumn::make('job_title')->limit(50),
                 Tables\Columns\TextColumn::make('note')->limit(50),

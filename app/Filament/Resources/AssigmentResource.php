@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Assigment;
 use Filament\{Tables, Forms};
+use App\Models\UserInstructor;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -20,7 +21,9 @@ use Filament\Forms\Components\BelongsToSelect;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Resources\{Form, Table, Resource};
 use App\Filament\Resources\AssigmentResource\Pages;
-use App\Models\UserInstructor;
+use App\Models\CourseGroup;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class AssigmentResource extends Resource
 {
@@ -30,7 +33,7 @@ class AssigmentResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    protected static ?string $navigationGroup = 'Main';
+    protected static ?string $navigationGroup = 'Education Portal';
 
     public static function getEloquentQuery(): Builder
     {
@@ -41,6 +44,8 @@ class AssigmentResource extends Resource
                     $q->where('type', 'trainer')->where('id', auth()->user()->id);
                 });
             });
+        } else if (auth()->user()->type === 'instructor') {
+            $query->where('user_id', auth()->user()->id);
         }
 
         return $query;
@@ -55,10 +60,16 @@ class AssigmentResource extends Resource
                     Select::make('user_id')
                         ->label('Instructor')
                         ->rules(['required', 'exists:users,id'])
-                        ->relationship('user', 'name')
                         ->options(function () {
                             return UserInstructor::all()->pluck('name', 'id');
                         })
+                        ->default(function ($record) {
+                            if (auth()->user()->type === 'instructor') {
+                                return auth()->user()->id;
+                            }
+                            return null;
+                        })
+                        ->disabled(auth()->user()->type === 'instructor')
                         ->searchable()
                         ->placeholder('Select an instructor')
                         ->columnSpan([
@@ -69,14 +80,19 @@ class AssigmentResource extends Resource
 
                     Select::make('course_group_id')
                         ->rules(['required', 'exists:course_groups,id'])
-                        ->relationship('courseGroup', 'name')
                         ->searchable()
+                        ->options(function () {
+                            if (auth()->user()->type === 'instructor') {
+                                return CourseGroup::where('user_id', auth()->user()->id)->pluck('name', 'id');
+                            }
+                            return CourseGroup::all()->pluck('name', 'id');
+                        })
                         ->placeholder('Course Group')
                         ->columnSpan([
                             'default' => 12,
                             'md' => 6,
                             'lg' => 6,
-                        ]),
+                        ])->reactive(),
 
                     TextInput::make('title')
                         ->rules(['required', 'max:255', 'string'])
@@ -107,14 +123,14 @@ class AssigmentResource extends Resource
                             'lg' => 6,
                         ]),
 
-                    FileUpload::make('file')
-                        ->rules(['nullable', 'file'])
-                        ->placeholder('File')
-                        ->columnSpan([
-                            'default' => 12,
-                            'md' => 6,
-                            'lg' => 6,
-                        ]),
+                    // FileUpload::make('file')
+                    //     ->rules(['nullable', 'file'])
+                    //     ->placeholder('File')
+                    //     ->columnSpan([
+                    //         'default' => 12,
+                    //         'md' => 6,
+                    //         'lg' => 6,
+                    //     ]),
 
                     RichEditor::make('body')
                         ->rules(['nullable', 'max:255', 'string'])
@@ -124,6 +140,32 @@ class AssigmentResource extends Resource
                             'md' => 12,
                             'lg' => 12,
                         ]),
+
+                    SpatieMediaLibraryFileUpload::make('attachments')
+                        ->multiple()
+                        ->enableDownload()
+                        ->enableReordering()
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 12,
+                            'lg' => 12,
+                        ]),
+
+                    CheckboxList::make('users')
+                        ->helperText('Who would you like to assign to this assignment?.')
+                        ->relationship('users', 'name')
+                        ->options(function (callable $get) {
+                            $courseGroup = CourseGroup::find($get('course_group_id'));
+                            if ($courseGroup) {
+                                return $courseGroup->users->pluck('name', 'id');
+                            }
+                        })
+                        ->bulkToggleable()
+                        ->columnSpan([
+                            'default' => 12,
+                            'md' => 12,
+                            'lg' => 12,
+                        ])
                 ]),
             ]),
         ]);
@@ -133,7 +175,7 @@ class AssigmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->label('Instructor')->limit(50),
                 Tables\Columns\TextColumn::make('courseGroup.name')->limit(50),
                 Tables\Columns\TextColumn::make('title')->limit(50),
                 Tables\Columns\TextColumn::make('dead_line')->date()->color(function (TextColumn $column) {

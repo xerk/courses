@@ -141,9 +141,10 @@ class UsersRelationManager extends BelongsToManyRelationManager
                         'lg' => 12,
                     ]),
 
-                BelongsToSelect::make('category_id')
+                Select::make('category_id')
                     ->rules(['nullable', 'exists:categories,id'])
                     ->relationship('category', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('Category')
                     ->columnSpan([
@@ -170,9 +171,10 @@ class UsersRelationManager extends BelongsToManyRelationManager
                         'lg' => 12,
                     ]),
 
-                BelongsToSelect::make('company_id')
+                Select::make('company_id')
                     ->rules(['nullable', 'exists:companies,id'])
                     ->relationship('company', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('Company')
                     ->columnSpan([

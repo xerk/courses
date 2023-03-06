@@ -33,6 +33,7 @@ class CourseResource extends Resource
                     BelongsToSelect::make('category_id')
                         ->rules(['required', 'exists:categories,id'])
                         ->relationship('category', 'name')
+                        ->preload()
                         ->searchable()
                         ->placeholder('Category')
                         ->columnSpan([
@@ -79,6 +80,7 @@ class CourseResource extends Resource
                     SpatieMediaLibraryFileUpload::make('documents')
                         ->multiple()
                         ->enableReordering()
+                        ->enableDownload()
                         ->columnSpan([
                             'default' => 12,
                             'md' => 12,
@@ -95,6 +97,7 @@ class CourseResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')->limit(50),
                 Tables\Columns\TextColumn::make('title')->limit(50),
+                Tables\Columns\TextColumn::make('type')->limit(50),
                 Tables\Columns\TextColumn::make('cost')->limit(50),
             ])
             ->filters([

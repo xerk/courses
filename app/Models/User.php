@@ -10,7 +10,6 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +25,6 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     use HasApiTokens;
     use HasRoles; //or HasFilamentShield
     use InteractsWithMedia;
-    use LogsActivity;
 
     protected $childTypes = [
         'sales' => UserSaller::class,
@@ -67,8 +65,8 @@ class User extends Authenticatable implements HasMedia, HasAvatar
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()
-            ->logOnly($this->fillable);
+        // return LogOptions::defaults()
+        //     ->logOnly($this->fillable);
     }
 
     public function trainer()
@@ -99,6 +97,11 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     public function courseGroups()
     {
         return $this->belongsToMany(CourseGroup::class);
+    }
+
+    public function assigments()
+    {
+        return $this->belongsToMany(Assigment::class);
     }
 
     public function documents()

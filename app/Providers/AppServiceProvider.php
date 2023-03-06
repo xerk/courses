@@ -27,9 +27,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Filament::serving(function () {
             Filament::registerNavigationGroups([
-                'Mian',
+                'Main',
                 'Sales Portal',
-                'User Managment',
+                'User Management',
+                'Reports'
             ]);
         });
     }

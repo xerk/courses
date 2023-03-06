@@ -62,7 +62,7 @@ class CompanyLeadResource extends Resource
 
     public static function getCompanyLeadForm()
     {
-        return Section::make('Company Lead')->schema([
+        return Section::make('Sales Follow Ups')->schema([
             Grid::make(['default' => 12])->schema([
                 Select::make('sales_id')
                     ->rules(['required'])
@@ -187,25 +187,13 @@ class CompanyLeadResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->limit(50),
-                Tables\Columns\TextColumn::make('end_date')->date()->color(function (TextColumn $column) {
-                    $date = new Carbon($column->getState());
-                    $now = Carbon::now()->format('Y-m-d');
-                    if ($date->format('Y-m-d') < $now) {
-                        return 'danger';
-                    }
-                    if ($date->subMonths(3)->format('Y-m-d') > $now) {
-                        return 'success';
-                    }
-                    if (new Carbon($column->getState()) > $now) {
-                        return 'warning';
-                    }
-                }),
                 // Tables\Columns\TextColumn::make('name_ar')->limit(50),
                 Tables\Columns\TextColumn::make('email')->limit(50),
                 // Tables\Columns\TextColumn::make('business_email')->limit(50),
                 Tables\Columns\TextColumn::make('phone')->limit(50),
                 // Tables\Columns\TextColumn::make('business_landline')->limit(50),
                 Tables\Columns\TextColumn::make('complete_with')->limit(50),
+                Tables\Columns\TextColumn::make('created_at')->date(),
                 // Tables\Columns\TextColumn::make('start_date')->date(),
                 // Tables\Columns\TextColumn::make('category.name')->limit(50),
                 // Tables\Columns\TextColumn::make('category_approved')->limit(50),

@@ -42,6 +42,7 @@ class EmployeeResource extends Resource
                 ->rules(['required', 'exists:users,id'])
                 ->relationship('user', 'name')
                 ->searchable()
+                ->preload()
                 ->placeholder('User')
                 ->columnSpan([
                     'default' => 12,
@@ -239,7 +240,7 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->label('Employee')->limit(50),
                 Tables\Columns\TextColumn::make('joining_date')->date(),
                 Tables\Columns\TextColumn::make('passport_id')->limit(50),
                 Tables\Columns\TextColumn::make('passport_realse_date')->date(),

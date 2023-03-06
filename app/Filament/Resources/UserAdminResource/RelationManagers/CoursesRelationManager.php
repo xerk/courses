@@ -23,10 +23,11 @@ class CoursesRelationManager extends BelongsToManyRelationManager
     {
         return $form->schema([
             Grid::make(['default' => 12])->schema([
-                BelongsToSelect::make('category_id')
+                Select::make('category_id')
                     ->rules(['required', 'exists:categories,id'])
                     ->relationship('category', 'name')
                     ->searchable()
+                    ->preload()
                     ->placeholder('Category')
                     ->columnSpan([
                         'default' => 12,

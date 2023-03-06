@@ -23,9 +23,10 @@ class CourseGroupsRelationManager extends BelongsToManyRelationManager
     {
         return $form->schema([
             Grid::make(['default' => 12])->schema([
-                BelongsToSelect::make('user_id')
+                Select::make('user_id')
                     ->rules(['required', 'exists:users,id'])
                     ->relationship('user', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('User')
                     ->columnSpan([
@@ -34,10 +35,11 @@ class CourseGroupsRelationManager extends BelongsToManyRelationManager
                         'lg' => 12,
                     ]),
 
-                BelongsToSelect::make('course_id')
+                Select::make('course_id')
                     ->rules(['required', 'exists:courses,id'])
                     ->relationship('course', 'title')
                     ->searchable()
+                    ->preload()
                     ->placeholder('Course')
                     ->columnSpan([
                         'default' => 12,
@@ -61,7 +63,7 @@ class CourseGroupsRelationManager extends BelongsToManyRelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->label('Instructor')->limit(50),
                 Tables\Columns\TextColumn::make('course.title')->limit(50),
                 Tables\Columns\TextColumn::make('name')->limit(50),
             ])

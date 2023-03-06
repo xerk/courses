@@ -141,10 +141,11 @@ class UsersRelationManager extends HasManyRelationManager
                         'lg' => 12,
                     ]),
 
-                BelongsToSelect::make('category_id')
+                Select::make('category_id')
                     ->rules(['nullable', 'exists:categories,id'])
                     ->relationship('category', 'name')
                     ->searchable()
+                    ->preload()
                     ->placeholder('Category')
                     ->columnSpan([
                         'default' => 12,

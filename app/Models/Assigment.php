@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Assigment extends Model
+class Assigment extends Model implements HasMedia
 {
     use HasFactory;
     use Searchable;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'user_id',
@@ -40,5 +43,10 @@ class Assigment extends Model
     public function assigmentAnswers()
     {
         return $this->hasMany(AssigmentAnswer::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

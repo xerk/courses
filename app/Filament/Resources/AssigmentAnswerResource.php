@@ -26,7 +26,7 @@ class AssigmentAnswerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $navigationGroup = 'Main';
+    protected static ?string $navigationGroup = 'Education Portal';
 
     protected static ?string $recordTitleAttribute = 'file';
 
@@ -62,6 +62,7 @@ class AssigmentAnswerResource extends Resource
         $assigmentId = Select::make('assigment_id')
             ->rules(['required'])
             ->relationship('assigment', 'title')
+            ->preload()
             ->searchable()
             ->placeholder('Assigment')
             ->columnSpan([
@@ -81,6 +82,7 @@ class AssigmentAnswerResource extends Resource
 
         $userId = Select::make('user_id')
             ->label('Student')
+            ->preload()
             ->rules(['required'])
             ->relationship('user', 'name')
             ->options(function () {

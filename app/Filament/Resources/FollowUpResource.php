@@ -43,6 +43,7 @@ class FollowUpResource extends Resource
         return Select::make('lead_id')
             ->rules(['required', 'exists:leads,id'])
             ->relationship('lead', 'name')
+            ->preload()
             ->searchable()
             ->placeholder('Lead')
             ->columnSpan([

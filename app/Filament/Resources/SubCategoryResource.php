@@ -29,9 +29,10 @@ class SubCategoryResource extends Resource
         return $form->schema([
             Card::make()->schema([
                 Grid::make(['default' => 0])->schema([
-                    BelongsToSelect::make('category_id')
+                    Select::make('category_id')
                         ->rules(['required', 'exists:categories,id'])
                         ->relationship('category', 'name')
+                        ->preload()
                         ->searchable()
                         ->placeholder('Category')
                         ->columnSpan([

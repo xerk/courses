@@ -159,9 +159,10 @@ class UsersRelationManager extends HasManyRelationManager
                         'lg' => 12,
                     ]),
 
-                BelongsToSelect::make('company_id')
+                Select::make('company_id')
                     ->rules(['nullable', 'exists:companies,id'])
                     ->relationship('company', 'name')
+                    ->preload()
                     ->searchable()
                     ->placeholder('Company')
                     ->columnSpan([

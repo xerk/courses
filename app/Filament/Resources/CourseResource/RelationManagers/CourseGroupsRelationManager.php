@@ -23,10 +23,11 @@ class CourseGroupsRelationManager extends HasManyRelationManager
     {
         return $form->schema([
             Grid::make(['default' => 12])->schema([
-                BelongsToSelect::make('user_id')
+                Select::make('user_id')
                     ->rules(['required', 'exists:users,id'])
                     ->relationship('user', 'name')
                     ->searchable()
+                    ->preload()
                     ->placeholder('User')
                     ->columnSpan([
                         'default' => 12,
@@ -50,7 +51,7 @@ class CourseGroupsRelationManager extends HasManyRelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->label('Instructor')->limit(50),
                 Tables\Columns\TextColumn::make('course.title')->limit(50),
                 Tables\Columns\TextColumn::make('name')->limit(50),
             ])
