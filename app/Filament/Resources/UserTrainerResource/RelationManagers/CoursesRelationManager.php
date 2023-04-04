@@ -18,8 +18,9 @@ use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
 
-class CoursesRelationManager extends RelationManager
+class CoursesRelationManager extends BelongsToManyRelationManager
 {
     protected static string $relationship = 'courses';
 
@@ -28,37 +29,37 @@ class CoursesRelationManager extends RelationManager
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 12])->schema([
-                Select::make('category_id')
-                    ->rules(['required', 'exists:categories,id'])
-                    ->relationship('category', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->placeholder('Category')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
+            // Grid::make(['default' => 12])->schema([
+            //     Select::make('category_id')
+            //         ->rules(['required', 'exists:categories,id'])
+            //         ->relationship('category', 'name')
+            //         ->preload()
+            //         ->searchable()
+            //         ->placeholder('Category')
+            //         ->columnSpan([
+            //             'default' => 12,
+            //             'md' => 12,
+            //             'lg' => 12,
+            //         ]),
 
-                TextInput::make('title')
-                    ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Title')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
+            //     TextInput::make('title')
+            //         ->rules(['required', 'max:255', 'string'])
+            //         ->placeholder('Title')
+            //         ->columnSpan([
+            //             'default' => 12,
+            //             'md' => 12,
+            //             'lg' => 12,
+            //         ]),
 
-                TextInput::make('cost')
-                    ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Cost')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
-            ]),
+            //     TextInput::make('cost')
+            //         ->rules(['required', 'max:255', 'string'])
+            //         ->placeholder('Cost')
+            //         ->columnSpan([
+            //             'default' => 12,
+            //             'md' => 12,
+            //             'lg' => 12,
+            //         ]),
+            // ]),
         ]);
     }
 

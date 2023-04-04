@@ -1,9 +1,14 @@
 <?php
 
+use App\Exports\LeadReport;
+use App\Exports\CompanyReport;
+use App\Exports\StudentsReport;
+use App\Exports\EmployeesReport;
+use App\Exports\CompanyLeadReport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CategoryController;
@@ -44,3 +49,24 @@ Route::prefix('/')
         Route::resource('sub-categories', SubCategoryController::class);
     });
 Route::get('download-assigment/{id}', [UserController::class, 'downloadAssigment'])->name('download.assigment');
+
+
+Route::get('export/students', function () {
+    return Excel::download(new StudentsReport, 'students.xlsx');
+})->name('export.students');
+
+Route::get('export/employees', function () {
+    return Excel::download(new EmployeesReport, 'employees.xlsx');
+})->name('export.employees');
+
+Route::get('export/leads', function () {
+    return Excel::download(new LeadReport, 'leads.xlsx');
+})->name('export.leads');
+
+Route::get('export/company-leads', function () {
+    return Excel::download(new CompanyLeadReport, 'company-leads.xlsx');
+})->name('export.company-leads');
+
+Route::get('export/companies', function () {
+    return Excel::download(new CompanyReport, 'companies.xlsx');
+})->name('export.companies');

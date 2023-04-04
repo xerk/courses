@@ -17,8 +17,11 @@ class ListUserEmployees extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\Action::make('export_employees')->label('Export Employees')->color('success')->icon('heroicon-o-document-download')
+            ->url(route('export.employees')),
         ];
     }
+
 
     protected function getTableRecordClassesUsing(): ?Closure
     {
@@ -26,11 +29,11 @@ class ListUserEmployees extends ListRecords
             $passport = $record->employee->passport_expire_date;
             $national = $record->employee->national_expire_date;
             $health = $record->employee->health_expire_date;
-            $passportWarning = Carbon::parse($passport)->subMonths(3); 
-            $nationalWarning = Carbon::parse($national)->subMonths(3); 
-            $healthWarning = Carbon::parse($health)->subMonths(3); 
-            if ((isset($passport) && $passport->isPast()) 
-                || (isset($national) && $national->isPast()) 
+            $passportWarning = Carbon::parse($passport)->subMonths(3);
+            $nationalWarning = Carbon::parse($national)->subMonths(3);
+            $healthWarning = Carbon::parse($health)->subMonths(3);
+            if ((isset($passport) && $passport->isPast())
+                || (isset($national) && $national->isPast())
                 || (isset($health) && $health->isPast()))
             {
                 return 'bg-danger-500/10 text-danger-500 dark:text-danger-500';

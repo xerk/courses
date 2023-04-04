@@ -117,7 +117,7 @@ class UserTrainerResource extends Resource
     {
         return [
             UserTrainerResource\RelationManagers\CoursesRelationManager::class,
-            UserTrainerResource\RelationManagers\DocumentsRelationManager::class,
+            // UserTrainerResource\RelationManagers\DocumentsRelationManager::class,
         ];
     }
 

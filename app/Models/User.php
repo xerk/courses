@@ -118,4 +118,9 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     {
         return url('storage/' . $this->avatar);
     }
+
+    public function canAccessFilament(): bool
+    {
+        return true;
+    }
 }

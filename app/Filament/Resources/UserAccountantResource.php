@@ -109,7 +109,6 @@ class UserAccountantResource extends Resource
             'index' => Pages\ListUserAccountants::route('/'),
             'create' => Pages\CreateUserAccountant::route('/create'),
             'edit' => Pages\EditUserAccountant::route('/{record}/edit'),
-            'create.payment' => Pages\CashPaymentSlip::route('/paymentSlip'),
         ];
     }
 }

@@ -14,7 +14,7 @@ class Course extends Model implements HasMedia
     use Searchable;
     use InteractsWithMedia;
 
-    protected $fillable = ['category_id', 'title', 'cost'];
+    protected $fillable = ['category_id', 'title', 'cost', 'type'];
 
     protected $searchableFields = ['*'];
 

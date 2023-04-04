@@ -69,8 +69,9 @@ class CourseResource extends Resource
                         ]),
 
                     TextInput::make('cost')
-                        ->rules(['required', 'max:255', 'string'])
+                        ->rules(['required'])
                         ->placeholder('Cost')
+                        ->numeric()
                         ->columnSpan([
                             'default' => 12,
                             'md' => 6,

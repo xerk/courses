@@ -5,6 +5,7 @@ namespace App\Filament\Resources\UserAccountantResource\Pages;
 use Filament\Resources\Pages\Page;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Tables\Columns\Layout\Grid;
 use App\Filament\Resources\UserAccountantResource;
 
@@ -14,40 +15,34 @@ class CashPaymentSlip extends Page
 
     protected static string $view = 'filament.resources.user-accountant-resource.pages.cash-payment-slip';
 
-    public $name;
 
-    public $email;
-
-    public $current_password;
-
-    public $new_password;
-
-    public $new_password_confirmation;
 
     public function mount()
     {
-        $this->form->fill([
-            'name' => auth()->user()->name,
-            'email' => auth()->user()->email,
-        ]);
+        // $this->record = $this->resolveRecord($record);
+        return $user ='hi';
     }
 
     public function submit()
     {
-        $this->form->getState();
+        // $this->form->getState();
 
-        $state = array_filter([
-            'name' => $this->name,
-            'email' => $this->email,
-        ]);
+        // $state = array_filter([
+        //     'name' => $this->name,
+        //     'email' => $this->email,
+        // ]);
 
-        $user = auth()->user();
+        // $user = auth()->user();
 
-        $user->update($state);
+        // $user->update($state);
 
 
-        $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
-        $this->notify('success', 'Your profile has been updated.');
+        // $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
+        // $this->notify('success', 'Your profile has been updated.');
+    }
+
+    public function print() {
+        $this->dispatchBrowserEvent('print');
     }
 
 

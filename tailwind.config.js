@@ -15,6 +15,8 @@ module.exports = {
         'dark:bg-red-300',
     ],
 
+    darkMode: 'class',
+
     theme: {
         extend: {
             fontFamily: {
@@ -27,6 +29,12 @@ module.exports = {
                 warning: colors.yellow,
             },
         },
+    },
+
+    variants: {
+        extend: {
+            backgroundColor: ['even'],
+        }
     },
 
     plugins: [require('@tailwindcss/forms')],

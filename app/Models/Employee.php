@@ -45,9 +45,9 @@ class Employee extends Model
         'health_realse_date' => 'date',
         'health_expire_date' => 'date',
     ];
-    
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(UserEmployee::class);
     }
 }
